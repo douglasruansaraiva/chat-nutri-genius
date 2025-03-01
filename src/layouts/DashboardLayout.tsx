@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useLocation, Navigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -48,7 +47,6 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const location = useLocation();
   const isMobile = useIsMobile();
   
-  // Check if user is authenticated (placeholder)
   const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
   
   useEffect(() => {
@@ -80,7 +78,6 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     window.location.href = "/";
   };
 
-  // Redirect to login if not authenticated
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
@@ -169,7 +166,7 @@ const DashboardSidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild active={isActive("/dashboard")}>
+                <SidebarMenuButton asChild isActive={isActive("/dashboard")}>
                   <Link to="/dashboard">
                     <Home size={20} />
                     <span>Dashboard</span>
@@ -178,7 +175,7 @@ const DashboardSidebar = () => {
               </SidebarMenuItem>
               
               <SidebarMenuItem>
-                <SidebarMenuButton asChild active={isActive("/chat")}>
+                <SidebarMenuButton asChild isActive={isActive("/chat")}>
                   <Link to="/chat">
                     <MessageSquare size={20} />
                     <span>Consulta</span>
@@ -187,7 +184,7 @@ const DashboardSidebar = () => {
               </SidebarMenuItem>
               
               <SidebarMenuItem>
-                <SidebarMenuButton asChild active={isActive("/progress")}>
+                <SidebarMenuButton asChild isActive={isActive("/progress")}>
                   <Link to="/progress">
                     <LineChart size={20} />
                     <span>Progresso</span>
@@ -196,7 +193,7 @@ const DashboardSidebar = () => {
               </SidebarMenuItem>
               
               <SidebarMenuItem>
-                <SidebarMenuButton asChild active={isActive("/goals")}>
+                <SidebarMenuButton asChild isActive={isActive("/goals")}>
                   <Link to="/goals">
                     <Goal size={20} />
                     <span>Metas</span>
@@ -205,7 +202,7 @@ const DashboardSidebar = () => {
               </SidebarMenuItem>
               
               <SidebarMenuItem>
-                <SidebarMenuButton asChild active={isActive("/meal-plan")}>
+                <SidebarMenuButton asChild isActive={isActive("/meal-plan")}>
                   <Link to="/meal-plan">
                     <Apple size={20} />
                     <span>Plano Alimentar</span>
@@ -214,7 +211,7 @@ const DashboardSidebar = () => {
               </SidebarMenuItem>
               
               <SidebarMenuItem>
-                <SidebarMenuButton asChild active={isActive("/calendar")}>
+                <SidebarMenuButton asChild isActive={isActive("/calendar")}>
                   <Link to="/calendar">
                     <Calendar size={20} />
                     <span>Calendário</span>
@@ -230,7 +227,7 @@ const DashboardSidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild active={isActive("/profile")}>
+                <SidebarMenuButton asChild isActive={isActive("/profile")}>
                   <Link to="/profile">
                     <User size={20} />
                     <span>Perfil</span>
@@ -239,7 +236,7 @@ const DashboardSidebar = () => {
               </SidebarMenuItem>
               
               <SidebarMenuItem>
-                <SidebarMenuButton asChild active={isActive("/settings")}>
+                <SidebarMenuButton asChild isActive={isActive("/settings")}>
                   <Link to="/settings">
                     <Settings size={20} />
                     <span>Configurações</span>

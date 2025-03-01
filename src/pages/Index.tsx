@@ -74,10 +74,10 @@ const Index = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 animate-slide-in" style={{ animationDelay: "0.2s" }}>
               <Button asChild size="lg" className="px-8">
-                <Link to="/login">Começar Agora</Link>
+                <Link to="/pricing">Começar Agora</Link>
               </Button>
               <Button asChild size="lg" variant="outline">
-                <Link to="/about">Saiba Mais</Link>
+                <Link to="/pricing">Saiba Mais</Link>
               </Button>
             </div>
           </div>
@@ -154,7 +154,7 @@ const Index = () => {
           
           <div className="mt-12 text-center">
             <Button asChild size="lg">
-              <Link to="/login">
+              <Link to="/pricing">
                 Começar Agora
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
@@ -215,7 +215,7 @@ const Index = () => {
             
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Button asChild size="lg" className="px-8">
-                <Link to="/login">Começar Agora</Link>
+                <Link to="/pricing">Começar Agora</Link>
               </Button>
               <Button asChild size="lg" variant="outline">
                 <Link to="/pricing">Ver Planos</Link>
