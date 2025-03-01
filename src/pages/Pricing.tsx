@@ -1,10 +1,10 @@
-
 import { useState } from "react";
 import MainLayout from "@/layouts/MainLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 type PlanFeature = {
   name: string;
@@ -21,6 +21,7 @@ type PricingPlan = {
 
 const Pricing = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [planPeriod, setPlanPeriod] = useState<"monthly" | "annual">("monthly");
   
   const plans: PricingPlan[] = [
@@ -73,11 +74,20 @@ const Pricing = () => {
   ];
   
   const handleSubscribe = (planName: string) => {
-    toast({
-      title: "Assinatura iniciada",
-      description: `Você selecionou o plano ${planName}. Redirecionando para o pagamento...`,
-      duration: 3000,
-    });
+    if (planName === "Gratuito") {
+      navigate("/dashboard");
+      toast({
+        title: "Bem-vindo ao plano gratuito!",
+        description: "Você agora tem acesso aos recursos básicos do NutriGênio.",
+        duration: 3000,
+      });
+    } else {
+      toast({
+        title: "Assinatura iniciada",
+        description: `Você selecionou o plano ${planName}. Redirecionando para o pagamento...`,
+        duration: 3000,
+      });
+    }
   };
   
   return (
