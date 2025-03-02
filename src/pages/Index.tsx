@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -103,10 +102,10 @@ const Index = () => {
       {/* Hero Section with 3D-like Elements */}
       <section className="relative pt-20 pb-16 md:pt-24 md:pb-20 overflow-hidden">
         <div className="absolute inset-0 -z-10">
-          <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-primary/5 rounded-bl-[100px] transform rotate-6"></div>
-          <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-primary/10 rounded-tr-[80px] transform -rotate-12"></div>
-          <div className="absolute top-1/4 left-1/4 w-16 h-16 bg-primary/20 rounded-full animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-24 h-24 bg-primary/15 rounded-full animate-pulse" style={{ animationDelay: "1s" }}></div>
+          <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-primary/5 rounded-bl-[100px] transform rotate-6"></div>
+          <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-primary/10 rounded-tr-[80px] transform -rotate-12"></div>
+          <div className="absolute top-1/4 left-1/4 w-12 h-12 bg-primary/20 rounded-full animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-16 h-16 bg-primary/15 rounded-full animate-pulse" style={{ animationDelay: "1s" }}></div>
         </div>
         
         <div className="container px-4 mx-auto">
@@ -141,19 +140,19 @@ const Index = () => {
             <div className="md:w-1/2 relative">
               <div className="relative z-10 rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
                 <img 
-                  src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                  alt="Pessoa saudável preparando alimentação" 
+                  src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                  alt="Frutas e vegetais saudáveis" 
                   className="w-full h-auto rounded-lg"
                 />
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/40 to-transparent mix-blend-overlay"></div>
               </div>
               
-              {/* Floating elements */}
-              <div className="absolute -top-5 -right-5 w-24 h-24 bg-nutrition-300 rounded-lg shadow-lg transform rotate-12 flex items-center justify-center">
-                <BarChart className="h-10 w-10 text-white" />
+              {/* Floating elements - Reduced size and repositioned */}
+              <div className="absolute -top-4 -right-4 w-20 h-20 bg-nutrition-300 rounded-lg shadow-lg transform rotate-12 flex items-center justify-center">
+                <BarChart className="h-8 w-8 text-white" />
               </div>
-              <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-nutrition-700 rounded-full shadow-lg flex items-center justify-center">
-                <TrendingUp className="h-12 w-12 text-white" />
+              <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-nutrition-700 rounded-full shadow-lg flex items-center justify-center">
+                <TrendingUp className="h-10 w-10 text-white" />
               </div>
             </div>
           </div>
@@ -368,9 +367,47 @@ const Index = () => {
                   </h3>
                   <p className="text-muted-foreground">{feature.description}</p>
                 </CardContent>
-                {/* Dynamic background elements */}
-                <div className="absolute top-0 right-0 w-24 h-24 bg-nutrition-50 rounded-bl-[50px] transform rotate-12 -z-0 opacity-50 group-hover:rotate-45 group-hover:scale-125 transition-all duration-700"></div>
-                <div className="absolute bottom-0 left-0 w-20 h-20 bg-nutrition-100 rounded-tr-[40px] transform -rotate-12 -z-0 opacity-40 group-hover:rotate-45 group-hover:scale-125 transition-all duration-700"></div>
+                {/* Background decorative elements - Reduced size and repositioned */}
+                <div className="absolute top-0 right-0 w-16 h-16 bg-nutrition-50 rounded-bl-[30px] transform rotate-12 -z-0 opacity-50 group-hover:rotate-45 group-hover:scale-125 transition-all duration-700"></div>
+                <div className="absolute bottom-0 left-0 w-14 h-14 bg-nutrition-100 rounded-tr-[25px] transform -rotate-12 -z-0 opacity-40 group-hover:rotate-45 group-hover:scale-125 transition-all duration-700"></div>
+                
+                {/* Add fruit images as decorative elements */}
+                {index === 0 && (
+                  <div className="absolute -bottom-2 -right-2 w-12 h-12 rounded-full overflow-hidden opacity-80">
+                    <img 
+                      src="https://images.unsplash.com/photo-1528825871115-3581a5387919?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
+                      alt="Fruta" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                {index === 1 && (
+                  <div className="absolute -bottom-2 -right-2 w-12 h-12 rounded-full overflow-hidden opacity-80">
+                    <img 
+                      src="https://images.unsplash.com/photo-1519996529931-28324d5a630e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
+                      alt="Fruta" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                {index === 2 && (
+                  <div className="absolute -bottom-2 -right-2 w-12 h-12 rounded-full overflow-hidden opacity-80">
+                    <img 
+                      src="https://images.unsplash.com/photo-1550258987-190a2d41a8ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
+                      alt="Fruta" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                {index === 3 && (
+                  <div className="absolute -bottom-2 -right-2 w-12 h-12 rounded-full overflow-hidden opacity-80">
+                    <img 
+                      src="https://images.unsplash.com/photo-1591287083773-9a5d8623a55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
+                      alt="Fruta" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
               </Card>
             ))}
           </div>
@@ -401,8 +438,8 @@ const Index = () => {
                   Registre-se e personalize seu perfil com suas informações, objetivos e preferências alimentares.
                 </p>
                 <img 
-                  src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                  alt="Pessoa criando perfil" 
+                  src="https://images.unsplash.com/photo-1578758837674-93ed0ab5fbab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                  alt="Frutas variadas e coloridas" 
                   className="mt-4 rounded-lg shadow-md w-full h-32 object-cover"
                 />
               </div>
@@ -416,8 +453,8 @@ const Index = () => {
                   Tire suas dúvidas sobre nutrição e receba recomendações personalizadas em tempo real.
                 </p>
                 <img 
-                  src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                  alt="Pessoa conversando com IA" 
+                  src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                  alt="Pessoa com frutas e vegetais" 
                   className="mt-4 rounded-lg shadow-md w-full h-32 object-cover"
                 />
               </div>
@@ -431,8 +468,8 @@ const Index = () => {
                   Utilize nossas ferramentas para monitorar seu progresso e manter o foco nos seus objetivos.
                 </p>
                 <img 
-                  src="https://images.unsplash.com/photo-1607962837359-5e7e89f86776?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                  alt="Pessoa acompanhando progresso" 
+                  src="https://images.unsplash.com/photo-1511688878353-3a2f5be94cd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                  alt="Frutas e vegetais numa mesa" 
                   className="mt-4 rounded-lg shadow-md w-full h-32 object-cover"
                 />
               </div>
@@ -468,7 +505,14 @@ const Index = () => {
             {testimonials.map((testimonial, index) => (
               <Card key={index} className="overflow-hidden transform transition-all duration-500 hover:shadow-xl perspective-1000 hover:rotate-y-5 group">
                 <CardContent className="p-6 relative">
-                  <div className="absolute top-0 right-0 -mt-4 -mr-4 h-32 w-32 bg-nutrition-100 rounded-full z-0 opacity-70 transition-transform duration-500 group-hover:scale-125 group-hover:rotate-12"></div>
+                  {/* Add fruit image as decorative element */}
+                  <div className="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full z-0 opacity-20 overflow-hidden">
+                    <img 
+                      src={`https://images.unsplash.com/photo-${index === 0 ? '1490474418585-ba9bad8fd0ea' : index === 1 ? '1490885578174-acda8905c2c6' : '1457296898342-cba958b01f45'}?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80`} 
+                      alt="Decoração de frutas" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                   
                   <div className="mb-4 relative z-10">
                     {[...Array(5)].map((_, i) => (
@@ -479,104 +523,4 @@ const Index = () => {
                   <div className="relative">
                     <span className="text-6xl text-nutrition-700 opacity-20 absolute -top-6 -left-2">"</span>
                     <p className="mb-6 text-muted-foreground relative z-10">{testimonial.content}</p>
-                    <span className="text-6xl text-nutrition-700 opacity-20 absolute -bottom-10 -right-2">"</span>
-                  </div>
-                  
-                  <div className="flex items-center relative z-10 mt-4">
-                    <div className="h-14 w-14 rounded-full bg-gradient-to-br from-nutrition-300 to-nutrition-700 flex items-center justify-center mr-4 shadow-md transform transition-transform group-hover:scale-110 duration-300">
-                      <span className="font-semibold text-white text-lg">
-                        {testimonial.name.charAt(0)}
-                      </span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold">{testimonial.name}</h4>
-                      <p className="text-sm text-nutrition-700">{testimonial.role}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-      
-      {/* Interactive Demo Mockup - Enhanced with animations */}
-      <section className="py-16 bg-muted/30">
-        <div className="container px-4 mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Veja o NutriGênio em ação</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Interface intuitiva e fácil de usar, projetada para simplificar sua jornada nutricional.
-            </p>
-          </div>
-          
-          <div className="relative max-w-4xl mx-auto">
-            <div className="relative z-10 shadow-2xl rounded-xl overflow-hidden border-8 border-white transform perspective-1000 hover:rotate-y-1 transition-all duration-500">
-              <img 
-                src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
-                alt="Interface do NutriGênio" 
-                className="w-full h-auto"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
-                <div className="p-6 text-white">
-                  <h3 className="text-xl font-bold mb-2">Dashboard personalizado</h3>
-                  <p className="text-white/80">Acompanhe seu progresso e receba recomendações personalizadas.</p>
-                </div>
-              </div>
-            </div>
-            
-            {/* Floating elements */}
-            <div className="absolute -top-5 -right-5 w-24 h-24 bg-nutrition-700 rounded-lg shadow-lg transform rotate-12 z-0 opacity-50"></div>
-            <div className="absolute -bottom-5 -left-5 w-20 h-20 bg-nutrition-300 rounded-full shadow-lg z-0 opacity-50"></div>
-          </div>
-        </div>
-      </section>
-      
-      {/* CTA Section with 3D Elements */}
-      <section className="py-20 relative overflow-hidden">
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-primary/5 rounded-bl-[100px] transform rotate-6"></div>
-          <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-primary/10 rounded-tr-[80px] transform -rotate-12"></div>
-        </div>
-        
-        <div className="container px-4 mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 animate-fade-in">
-            Pronto para transformar sua <span className="text-primary">nutrição</span>?
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-in" style={{ animationDelay: "0.1s" }}>
-            Comece agora e descubra como o NutriGênio pode ajudar você a alcançar seus objetivos de saúde.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-            <Button asChild size="lg" className="px-8 relative overflow-hidden group">
-              <Link to="/pricing">
-                Começar Gratuitamente
-                <span className="absolute inset-0 w-full h-full bg-white/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline">
-              <Link to="/pricing">Ver Planos</Link>
-            </Button>
-          </div>
-          
-          <div className="mt-12 flex justify-center space-x-8 animate-fade-in" style={{ animationDelay: "0.3s" }}>
-            <div className="flex items-center">
-              <Check className="h-5 w-5 text-primary mr-2" />
-              <span className="text-sm">Sem cartão de crédito</span>
-            </div>
-            <div className="flex items-center">
-              <Check className="h-5 w-5 text-primary mr-2" />
-              <span className="text-sm">Cancele quando quiser</span>
-            </div>
-            <div className="flex items-center">
-              <Check className="h-5 w-5 text-primary mr-2" />
-              <span className="text-sm">Suporte personalizado</span>
-            </div>
-          </div>
-        </div>
-      </section>
-    </MainLayout>
-  );
-};
-
-export default Index;
+                    <span className="text-6xl text-nutrition-700 opacity-20 absolute -bottom-10
