@@ -1,4 +1,4 @@
-
+<lov-code>
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -61,12 +61,17 @@ const resultData = [
 const Index = () => {
   const [activeDataIndex, setActiveDataIndex] = useState(-1);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
 
+  // Modificação do primeiro useEffect para evitar rolagem automática após carregamento inicial
   useEffect(() => {
-    window.scrollTo(0, 0);
-    
-    // Start the graph animation
-    setIsAnimating(true);
+    // Apenas rola para o topo na primeira vez que a página é carregada
+    if (!initialLoadDone) {
+      window.scrollTo(0, 0);
+      setInitialLoadDone(true);
+      // Inicia a animação do gráfico
+      setIsAnimating(true);
+    }
     
     // Animation interval for graph bars
     const animationInterval = setInterval(() => {
@@ -87,7 +92,7 @@ const Index = () => {
     }, 600);
     
     return () => clearInterval(animationInterval);
-  }, [isAnimating]);
+  }, [isAnimating, initialLoadDone]);
 
   // Update active state in data based on activeDataIndex
   useEffect(() => {
@@ -522,139 +527,4 @@ const Index = () => {
                   </div>
                   
                   <div className="relative">
-                    <span className="text-6xl text-nutrition-700 opacity-20 absolute -top-6 -left-2">"</span>
-                    <p className="mb-6 text-muted-foreground relative z-10">{testimonial.content}</p>
-                    <span className="text-6xl text-nutrition-700 opacity-20 absolute -bottom-10 -right-2">"</span>
-                  </div>
-                  
-                  <div className="flex items-center relative z-10 mt-4">
-                    <div className="h-14 w-14 rounded-full bg-gradient-to-br from-nutrition-300 to-nutrition-700 flex items-center justify-center mr-4 shadow-md transform transition-transform group-hover:scale-110 duration-300">
-                      <span className="font-semibold text-white text-lg">
-                        {testimonial.name.charAt(0)}
-                      </span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold">{testimonial.name}</h4>
-                      <p className="text-sm text-nutrition-700">{testimonial.role}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-      
-      {/* Interactive Demo Mockup - Enhanced with animations */}
-      <section className="py-16 bg-muted/30">
-        <div className="container px-4 mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Veja o NutriGênio em ação</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Interface intuitiva e fácil de usar, projetada para simplificar sua jornada nutricional.
-            </p>
-          </div>
-          
-          <div className="relative max-w-4xl mx-auto">
-            <div className="relative z-10 shadow-2xl rounded-xl overflow-hidden border-8 border-white transform perspective-1000 hover:rotate-y-1 transition-all duration-500">
-              <img 
-                src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
-                alt="Interface do NutriGênio" 
-                className="w-full h-auto"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
-                <div className="p-6 text-white">
-                  <h3 className="text-xl font-bold mb-2">Dashboard personalizado</h3>
-                  <p className="text-white/80">Acompanhe seu progresso e receba recomendações personalizadas.</p>
-                </div>
-              </div>
-            </div>
-            
-            {/* Floating elements */}
-            <div className="absolute -top-5 -right-5 w-24 h-24 bg-nutrition-700 rounded-lg shadow-lg transform rotate-12 z-0 opacity-50"></div>
-            <div className="absolute -bottom-5 -left-5 w-20 h-20 bg-nutrition-300 rounded-full shadow-lg z-0 opacity-50"></div>
-          </div>
-        </div>
-      </section>
-      
-      {/* CTA Section with 3D Elements */}
-      <section className="py-20 relative overflow-hidden">
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-primary/5 rounded-bl-[100px] transform rotate-6"></div>
-          <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-primary/10 rounded-tr-[80px] transform -rotate-12"></div>
-        </div>
-        
-        <div className="container px-4 mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Pronto para transformar sua alimentação?</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
-            Junte-se a milhares de pessoas que já estão alcançando seus objetivos com o NutriGênio.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="px-8 relative overflow-hidden group">
-              <Link to="/pricing">
-                Comece Gratuitamente
-                <span className="absolute inset-0 w-full h-full bg-white/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline">
-              <Link to="/pricing">Ver Planos</Link>
-            </Button>
-          </div>
-          
-          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="flex flex-col items-center">
-              <div className="h-20 w-20 rounded-full flex items-center justify-center mb-4 relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1519996529931-28324d5a630e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" 
-                  alt="Frutas" 
-                  className="w-full h-full object-cover rounded-full"
-                />
-              </div>
-              <h3 className="font-semibold text-lg mb-1">Alimentação Saudável</h3>
-              <p className="text-muted-foreground text-sm">Dicas e receitas</p>
-            </div>
-            
-            <div className="flex flex-col items-center">
-              <div className="h-20 w-20 rounded-full flex items-center justify-center mb-4 relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1578758837674-93ed0ab5fbab?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" 
-                  alt="Frutas" 
-                  className="w-full h-full object-cover rounded-full"
-                />
-              </div>
-              <h3 className="font-semibold text-lg mb-1">Progresso Monitorado</h3>
-              <p className="text-muted-foreground text-sm">Acompanhe resultados</p>
-            </div>
-            
-            <div className="flex flex-col items-center">
-              <div className="h-20 w-20 rounded-full flex items-center justify-center mb-4 relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1511688878353-3a2f5be94cd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" 
-                  alt="Vegetais" 
-                  className="w-full h-full object-cover rounded-full"
-                />
-              </div>
-              <h3 className="font-semibold text-lg mb-1">Planos Personalizados</h3>
-              <p className="text-muted-foreground text-sm">Para suas necessidades</p>
-            </div>
-            
-            <div className="flex flex-col items-center">
-              <div className="h-20 w-20 rounded-full flex items-center justify-center mb-4 relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1528825871115-3581a5387919?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" 
-                  alt="Frutas" 
-                  className="w-full h-full object-cover rounded-full"
-                />
-              </div>
-              <h3 className="font-semibold text-lg mb-1">Assistente Inteligente</h3>
-              <p className="text-muted-foreground text-sm">Responde suas dúvidas</p>
-            </div>
-          </div>
-        </div>
-      </section>
-    </MainLayout>
-  );
-};
-
-export default Index;
+                    <span className="
