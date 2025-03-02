@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -534,4 +535,48 @@ const Index = () => {
       {/* CTA Section with 3D Elements */}
       <section className="py-20 relative overflow-hidden">
         <div className="absolute inset-0 -z-10">
-          <div
+          <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-primary/5 rounded-bl-[100px] transform rotate-6"></div>
+          <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-primary/10 rounded-tr-[80px] transform -rotate-12"></div>
+        </div>
+        
+        <div className="container px-4 mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 animate-fade-in">
+            Pronto para transformar sua <span className="text-primary">nutrição</span>?
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+            Comece agora e descubra como o NutriGênio pode ajudar você a alcançar seus objetivos de saúde.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+            <Button asChild size="lg" className="px-8 relative overflow-hidden group">
+              <Link to="/pricing">
+                Começar Gratuitamente
+                <span className="absolute inset-0 w-full h-full bg-white/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <Link to="/pricing">Ver Planos</Link>
+            </Button>
+          </div>
+          
+          <div className="mt-12 flex justify-center space-x-8 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+            <div className="flex items-center">
+              <Check className="h-5 w-5 text-primary mr-2" />
+              <span className="text-sm">Sem cartão de crédito</span>
+            </div>
+            <div className="flex items-center">
+              <Check className="h-5 w-5 text-primary mr-2" />
+              <span className="text-sm">Cancele quando quiser</span>
+            </div>
+            <div className="flex items-center">
+              <Check className="h-5 w-5 text-primary mr-2" />
+              <span className="text-sm">Suporte personalizado</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </MainLayout>
+  );
+};
+
+export default Index;
