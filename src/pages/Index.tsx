@@ -1,5 +1,4 @@
-
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -48,20 +47,55 @@ const testimonials = [
   },
 ];
 
-// Mock data for results graph
+// Enhanced data for animated graph
 const resultData = [
-  { month: "Jan", weight: 80 },
-  { month: "Fev", weight: 78 },
-  { month: "Mar", weight: 75 },
-  { month: "Abr", weight: 73 },
-  { month: "Mai", weight: 70 },
-  { month: "Jun", weight: 68 },
+  { month: "Jan", weight: 80, calories: 2600, active: false },
+  { month: "Fev", weight: 78, calories: 2500, active: false },
+  { month: "Mar", weight: 75, calories: 2400, active: false },
+  { month: "Abr", weight: 73, calories: 2300, active: false },
+  { month: "Mai", weight: 70, calories: 2200, active: false },
+  { month: "Jun", weight: 68, calories: 2100, active: false },
 ];
 
 const Index = () => {
+  const [activeDataIndex, setActiveDataIndex] = useState(-1);
+  const [isAnimating, setIsAnimating] = useState(false);
+
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    
+    // Start the graph animation
+    setIsAnimating(true);
+    
+    // Animation interval for graph bars
+    const animationInterval = setInterval(() => {
+      setActiveDataIndex(prev => {
+        const newIndex = prev + 1;
+        if (newIndex >= resultData.length) {
+          clearInterval(animationInterval);
+          setTimeout(() => {
+            // Reset animation after a few seconds
+            setActiveDataIndex(-1);
+            setIsAnimating(false);
+            setTimeout(() => setIsAnimating(true), 500);
+          }, 2000);
+          return -1;
+        }
+        return newIndex;
+      });
+    }, 600);
+    
+    return () => clearInterval(animationInterval);
+  }, [isAnimating]);
+
+  // Update active state in data based on activeDataIndex
+  useEffect(() => {
+    if (activeDataIndex >= 0 && activeDataIndex < resultData.length) {
+      resultData.forEach((item, index) => {
+        resultData[index].active = index <= activeDataIndex;
+      });
+    }
+  }, [activeDataIndex]);
 
   return (
     <MainLayout>
@@ -125,105 +159,193 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Results Visualization Section */}
-      <section className="py-16 bg-muted/30">
+      {/* Results Visualization Section - Enhanced with animations */}
+      <section className="py-16 bg-gradient-to-r from-muted/30 to-muted/10">
         <div className="container px-4 mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Resultados Reais</h2>
+            <h2 className="text-3xl font-bold mb-4 relative inline-block">
+              Resultados Reais
+              <span className="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-nutrition-700 to-nutrition-300 transform scale-x-0 transition-transform duration-500 origin-left animate-scale-x"></span>
+            </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Veja como nossos usuários transformam seus corpos e hábitos com o NutriGênio.
             </p>
           </div>
           
           <div className="grid md:grid-cols-2 gap-10 items-center">
-            <div className="bg-white rounded-xl shadow-lg p-6 transform hover:scale-105 transition-transform duration-300">
-              <h3 className="text-xl font-semibold mb-4 text-primary">Perda de Peso Consistente</h3>
+            <div className="bg-white rounded-xl shadow-lg p-6 transform transition-all duration-700 hover:shadow-2xl perspective-1000 group">
+              <h3 className="text-xl font-semibold mb-4 text-primary flex items-center">
+                <LineChart className="mr-2 h-5 w-5" />
+                Perda de Peso Consistente
+              </h3>
               
-              {/* Simplified Chart Visualization */}
-              <div className="relative h-64 w-full">
+              {/* Animated Chart Visualization */}
+              <div className="relative h-64 w-full overflow-hidden bg-white rounded-lg p-4">
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-muted"></div>
                 <div className="absolute left-0 bottom-0 top-0 w-1 bg-muted"></div>
                 
                 <div className="flex justify-between items-end h-full relative z-10">
                   {resultData.map((item, index) => (
-                    <div key={index} className="flex flex-col items-center">
+                    <div key={index} className="flex flex-col items-center relative group cursor-pointer" 
+                         onMouseEnter={() => !isAnimating && setActiveDataIndex(index)}>
                       <div 
-                        className="w-8 bg-primary rounded-t-lg transition-all duration-1000" 
+                        className={cn(
+                          "w-10 rounded-t-lg transition-all duration-700 ease-out flex justify-center items-end overflow-hidden",
+                          item.active || activeDataIndex === -1 ? "bg-gradient-to-t from-nutrition-700 to-nutrition-500" : "bg-gray-200"
+                        )}
                         style={{ 
-                          height: `${((80 - item.weight) / 15) * 100}%`,
-                          animationDelay: `${index * 0.2}s`
+                          height: item.active || activeDataIndex === -1 ? `${((80 - item.weight) / 15) * 100}%` : "0%",
+                          transitionDelay: `${index * 0.1}s`
                         }}
-                      ></div>
-                      <span className="text-xs mt-2">{item.month}</span>
+                      >
+                        <span className="text-white text-xs font-bold mb-1">{item.weight}kg</span>
+                      </div>
+                      <span className="text-xs mt-2 font-medium">{item.month}</span>
+                      
+                      {/* Tooltip on hover */}
+                      <div className={cn(
+                        "absolute -top-20 left-1/2 transform -translate-x-1/2 bg-white p-2 rounded-lg shadow-lg transition-all duration-300 z-20",
+                        "opacity-0 invisible group-hover:opacity-100 group-hover:visible",
+                        "w-32 text-center"
+                      )}>
+                        <p className="text-xs font-bold">{item.month}</p>
+                        <p className="text-xs text-nutrition-700">Peso: {item.weight}kg</p>
+                        <p className="text-xs text-muted-foreground">Calorias: {item.calories}</p>
+                        <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-white rotate-45"></div>
+                      </div>
                     </div>
                   ))}
                 </div>
                 
                 {/* Y-axis labels */}
-                <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-muted-foreground">
+                <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-muted-foreground pointer-events-none">
                   <span>60kg</span>
                   <span>70kg</span>
                   <span>80kg</span>
                 </div>
+                
+                {/* Animated trend line */}
+                <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ padding: "20px 0" }}>
+                  <defs>
+                    <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#1a811a" />
+                      <stop offset="100%" stopColor="#80b980" />
+                    </linearGradient>
+                  </defs>
+                  <path 
+                    d={`M 20,${220 - ((80 - 80) / 15) * 170} 
+                        L ${20 + (1 * 60)},${220 - ((80 - 78) / 15) * 170} 
+                        L ${20 + (2 * 60)},${220 - ((80 - 75) / 15) * 170} 
+                        L ${20 + (3 * 60)},${220 - ((80 - 73) / 15) * 170} 
+                        L ${20 + (4 * 60)},${220 - ((80 - 70) / 15) * 170} 
+                        L ${20 + (5 * 60)},${220 - ((80 - 68) / 15) * 170}`}
+                    fill="none"
+                    stroke="url(#lineGradient)"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeDasharray="500"
+                    strokeDashoffset={isAnimating ? "0" : "500"}
+                    className="transition-all duration-1500 ease-out"
+                  />
+                  {resultData.map((item, index) => (
+                    <circle 
+                      key={index}
+                      cx={20 + (index * 60)} 
+                      cy={220 - ((80 - item.weight) / 15) * 170}
+                      r="4"
+                      fill={item.active || activeDataIndex === -1 ? "#1a811a" : "#cccccc"}
+                      className="transition-all duration-300"
+                      style={{ transitionDelay: `${index * 0.1}s` }}
+                    />
+                  ))}
+                </svg>
               </div>
               
               <div className="mt-4 text-center">
-                <p className="text-muted-foreground">Média de perda de peso dos usuários em 6 meses</p>
+                <p className="text-muted-foreground text-sm">Média de perda de peso dos usuários em 6 meses</p>
+                <button 
+                  onClick={() => {setIsAnimating(false); setTimeout(() => setIsAnimating(true), 300);}}
+                  className="mt-2 text-xs text-nutrition-700 hover:underline flex items-center justify-center mx-auto"
+                >
+                  <TrendingUp className="h-3 w-3 mr-1" />
+                  Replay animação
+                </button>
               </div>
             </div>
             
             <div className="flex flex-col gap-4">
-              <div className="relative bg-white rounded-xl shadow-lg p-6 overflow-hidden">
-                <div className="absolute top-0 right-0 w-20 h-20 bg-primary/10 rounded-bl-[50px]"></div>
-                
-                <div className="flex items-center mb-4">
-                  <div className="h-12 w-12 rounded-full bg-nutrition-100 flex items-center justify-center mr-4">
-                    <Award className="h-6 w-6 text-nutrition-800" />
+              <Card className="relative overflow-hidden group">
+                <CardContent className="p-6">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-nutrition-100 rounded-bl-[60px] transform rotate-6 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12"></div>
+                  
+                  <div className="flex items-center mb-4 relative z-10">
+                    <div className="h-14 w-14 rounded-full bg-gradient-to-br from-nutrition-300 to-nutrition-700 flex items-center justify-center mr-4 shadow-md transform transition-transform group-hover:scale-110 duration-300">
+                      <Award className="h-8 w-8 text-white drop-shadow-sm" />
+                    </div>
+                    <div>
+                      <div className="flex items-center">
+                        <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-nutrition-800 to-nutrition-600 animate-pulse" style={{ animationDuration: "3s" }}>93%</h3>
+                        <div className="w-16 h-6 ml-2 bg-nutrition-100 rounded-full overflow-hidden">
+                          <div className="h-full w-[93%] bg-gradient-to-r from-nutrition-700 to-nutrition-500 transform -translate-x-full animate-slide-in" style={{ animationDuration: "1.5s", animationFillMode: "forwards", animationDelay: "0.5s" }}></div>
+                        </div>
+                      </div>
+                      <p className="text-muted-foreground">dos usuários relatam melhora nos hábitos alimentares</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-xl font-semibold">93%</h3>
-                    <p className="text-muted-foreground">dos usuários relatam melhora nos hábitos alimentares</p>
-                  </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
               
-              <div className="relative bg-white rounded-xl shadow-lg p-6 overflow-hidden">
-                <div className="absolute top-0 right-0 w-20 h-20 bg-primary/10 rounded-bl-[50px]"></div>
-                
-                <div className="flex items-center mb-4">
-                  <div className="h-12 w-12 rounded-full bg-nutrition-100 flex items-center justify-center mr-4">
-                    <TrendingUp className="h-6 w-6 text-nutrition-800" />
+              <Card className="relative overflow-hidden group">
+                <CardContent className="p-6">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-nutrition-100 rounded-bl-[60px] transform rotate-6 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12"></div>
+                  
+                  <div className="flex items-center mb-4 relative z-10">
+                    <div className="h-14 w-14 rounded-full bg-gradient-to-br from-nutrition-300 to-nutrition-700 flex items-center justify-center mr-4 shadow-md transform transition-transform group-hover:scale-110 duration-300">
+                      <TrendingUp className="h-8 w-8 text-white drop-shadow-sm" />
+                    </div>
+                    <div>
+                      <div className="flex items-center">
+                        <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-nutrition-800 to-nutrition-600 animate-pulse" style={{ animationDuration: "3s" }}>78%</h3>
+                        <div className="w-16 h-6 ml-2 bg-nutrition-100 rounded-full overflow-hidden">
+                          <div className="h-full w-[78%] bg-gradient-to-r from-nutrition-700 to-nutrition-500 transform -translate-x-full animate-slide-in" style={{ animationDuration: "1.5s", animationFillMode: "forwards", animationDelay: "0.7s" }}></div>
+                        </div>
+                      </div>
+                      <p className="text-muted-foreground">atingem seus objetivos de saúde em menos de 6 meses</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-xl font-semibold">78%</h3>
-                    <p className="text-muted-foreground">atingem seus objetivos de saúde em menos de 6 meses</p>
-                  </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
               
-              <div className="relative bg-white rounded-xl shadow-lg p-6 overflow-hidden">
-                <div className="absolute top-0 right-0 w-20 h-20 bg-primary/10 rounded-bl-[50px]"></div>
-                
-                <div className="flex items-center mb-4">
-                  <div className="h-12 w-12 rounded-full bg-nutrition-100 flex items-center justify-center mr-4">
-                    <User className="h-6 w-6 text-nutrition-800" />
+              <Card className="relative overflow-hidden group">
+                <CardContent className="p-6">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-nutrition-100 rounded-bl-[60px] transform rotate-6 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12"></div>
+                  
+                  <div className="flex items-center mb-4 relative z-10">
+                    <div className="h-14 w-14 rounded-full bg-gradient-to-br from-nutrition-300 to-nutrition-700 flex items-center justify-center mr-4 shadow-md transform transition-transform group-hover:scale-110 duration-300">
+                      <User className="h-8 w-8 text-white drop-shadow-sm" />
+                    </div>
+                    <div>
+                      <div className="flex items-center">
+                        <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-nutrition-800 to-nutrition-600 animate-pulse" style={{ animationDuration: "3s" }}>12,000+</h3>
+                      </div>
+                      <p className="text-muted-foreground">usuários ativos em nossa plataforma</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-xl font-semibold">12.000+</h3>
-                    <p className="text-muted-foreground">usuários ativos em nossa plataforma</p>
-                  </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
       </section>
       
-      {/* Feature Section with 3D Cards */}
+      {/* Feature Section with Enhanced 3D Cards */}
       <section className="py-16">
         <div className="container px-4 mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Como o NutriGênio pode te ajudar</h2>
+            <h2 className="text-3xl font-bold mb-4 relative inline-block">
+              Como o NutriGênio pode te ajudar
+              <span className="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-nutrition-700 to-nutrition-300 transform scale-x-0 transition-transform duration-500 origin-left animate-scale-x"></span>
+            </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Nossa plataforma oferece ferramentas poderosas para apoiar sua jornada de saúde e bem-estar.
             </p>
@@ -233,23 +355,28 @@ const Index = () => {
             {features.map((feature, index) => (
               <Card 
                 key={index} 
-                className="border-border overflow-hidden group transform perspective-1000 transition-all duration-500 hover:shadow-xl"
+                className="border-border overflow-hidden group perspective-1000 transition-all duration-500 hover:shadow-xl relative"
               >
-                <CardContent className="p-6 relative">
-                  <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                    <feature.icon className="h-6 w-6 text-primary" />
+                <CardContent className="p-6 relative z-10">
+                  <div className="h-14 w-14 rounded-lg bg-gradient-to-br from-nutrition-100 to-nutrition-300 flex items-center justify-center mb-4 shadow-md transform transition-all duration-300 group-hover:rotate-y-180 group-hover:scale-110">
+                    <feature.icon className="h-7 w-7 text-nutrition-800 drop-shadow-sm" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                  <h3 className="text-xl font-semibold mb-2 relative inline-block">
+                    {feature.title}
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-nutrition-700 group-hover:w-full transition-all duration-300"></span>
+                  </h3>
                   <p className="text-muted-foreground">{feature.description}</p>
-                  <div className="absolute bottom-0 right-0 w-20 h-20 bg-primary/5 rounded-tl-[50px] transform rotate-12 -z-10"></div>
                 </CardContent>
+                {/* Dynamic background elements */}
+                <div className="absolute top-0 right-0 w-24 h-24 bg-nutrition-50 rounded-bl-[50px] transform rotate-12 -z-0 opacity-50 group-hover:rotate-45 group-hover:scale-125 transition-all duration-700"></div>
+                <div className="absolute bottom-0 left-0 w-20 h-20 bg-nutrition-100 rounded-tr-[40px] transform -rotate-12 -z-0 opacity-40 group-hover:rotate-45 group-hover:scale-125 transition-all duration-700"></div>
               </Card>
             ))}
           </div>
         </div>
       </section>
       
-      {/* How It Works with Visual Timeline */}
+      {/* How It Works with Visual Timeline - Enhanced with animations */}
       <section className="py-16 bg-muted/30">
         <div className="container px-4 mx-auto">
           <div className="text-center mb-12">
@@ -327,7 +454,10 @@ const Index = () => {
       <section className="py-16">
         <div className="container px-4 mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">O que nossos usuários dizem</h2>
+            <h2 className="text-3xl font-bold mb-4 relative inline-block">
+              O que nossos usuários dizem
+              <span className="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-nutrition-700 to-nutrition-300 transform scale-x-0 transition-transform duration-500 origin-left animate-scale-x"></span>
+            </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Histórias reais de pessoas que transformaram suas vidas com o NutriGênio.
             </p>
@@ -335,31 +465,31 @@ const Index = () => {
           
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="overflow-hidden transform transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
+              <Card key={index} className="overflow-hidden transform transition-all duration-500 hover:shadow-xl perspective-1000 hover:rotate-y-5 group">
                 <CardContent className="p-6 relative">
-                  <div className="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 bg-primary/5 rounded-full z-0"></div>
+                  <div className="absolute top-0 right-0 -mt-4 -mr-4 h-32 w-32 bg-nutrition-100 rounded-full z-0 opacity-70 transition-transform duration-500 group-hover:scale-125 group-hover:rotate-12"></div>
                   
-                  <div className="mb-4">
+                  <div className="mb-4 relative z-10">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="inline-block h-5 w-5 text-yellow-500 fill-current" />
+                      <Star key={i} className="inline-block h-5 w-5 text-yellow-500 fill-current transform transition-transform duration-300 hover:scale-125" />
                     ))}
                   </div>
                   
                   <div className="relative">
-                    <span className="text-6xl text-primary opacity-20 absolute -top-6 -left-2">"</span>
+                    <span className="text-6xl text-nutrition-700 opacity-20 absolute -top-6 -left-2">"</span>
                     <p className="mb-6 text-muted-foreground relative z-10">{testimonial.content}</p>
-                    <span className="text-6xl text-primary opacity-20 absolute -bottom-10 -right-2">"</span>
+                    <span className="text-6xl text-nutrition-700 opacity-20 absolute -bottom-10 -right-2">"</span>
                   </div>
                   
-                  <div className="flex items-center relative z-10">
-                    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mr-3">
-                      <span className="font-semibold text-primary">
+                  <div className="flex items-center relative z-10 mt-4">
+                    <div className="h-14 w-14 rounded-full bg-gradient-to-br from-nutrition-300 to-nutrition-700 flex items-center justify-center mr-4 shadow-md transform transition-transform group-hover:scale-110 duration-300">
+                      <span className="font-semibold text-white text-lg">
                         {testimonial.name.charAt(0)}
                       </span>
                     </div>
                     <div>
                       <h4 className="font-semibold">{testimonial.name}</h4>
-                      <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                      <p className="text-sm text-nutrition-700">{testimonial.role}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -369,7 +499,7 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Interactive Demo Mockup */}
+      {/* Interactive Demo Mockup - Enhanced with animations */}
       <section className="py-16 bg-muted/30">
         <div className="container px-4 mx-auto">
           <div className="text-center mb-12">
@@ -404,70 +534,4 @@ const Index = () => {
       {/* CTA Section with 3D Elements */}
       <section className="py-20 relative overflow-hidden">
         <div className="absolute inset-0 -z-10">
-          <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-primary/5 rounded-bl-[100px] transform rotate-12"></div>
-          <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-primary/10 rounded-tr-[80px] transform -rotate-6"></div>
-        </div>
-        
-        <div className="container px-4 mx-auto">
-          <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-10 relative overflow-hidden">
-            <div className="absolute -right-20 -top-20 w-40 h-40 bg-primary/10 rounded-full"></div>
-            <div className="absolute -left-10 -bottom-10 w-32 h-32 bg-nutrition-100 rounded-full"></div>
-            
-            <div className="text-center relative z-10">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                Pronto para transformar sua relação com a alimentação?
-              </h2>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Junte-se a milhares de pessoas que já estão alcançando seus objetivos de saúde 
-                com o NutriGênio.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button asChild size="lg" className="px-8 relative overflow-hidden group">
-                  <Link to="/pricing">
-                    Começar Agora
-                    <span className="absolute inset-0 w-full h-full bg-white/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
-                  </Link>
-                </Button>
-                <Button asChild size="lg" variant="outline">
-                  <Link to="/pricing">Ver Planos</Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* Benefits with Visual Icons */}
-      <section className="py-16 bg-muted/30">
-        <div className="container px-4 mx-auto">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold mb-12 text-center">
-              Benefícios do NutriGênio
-            </h2>
-            
-            <div className="space-y-6">
-              {[
-                "Acessibilidade 24/7 para tirar suas dúvidas sobre nutrição",
-                "Recomendações personalizadas baseadas no seu perfil e objetivos",
-                "Ferramentas de acompanhamento para manter você motivado",
-                "Conteúdo educativo sobre alimentação saudável e hábitos sustentáveis",
-                "Suporte contínuo para ajudar você a superar desafios e manter o foco",
-                "Planos alimentares adaptados às suas necessidades e preferências"
-              ].map((benefit, index) => (
-                <div key={index} className="flex items-start gap-3 bg-white p-4 rounded-lg shadow-md transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                  <div className="h-6 w-6 rounded-full bg-nutrition-700 flex-shrink-0 flex items-center justify-center">
-                    <Check className="h-3 w-3 text-white" />
-                  </div>
-                  <p className="font-medium">{benefit}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-    </MainLayout>
-  );
-};
-
-export default Index;
+          <div
