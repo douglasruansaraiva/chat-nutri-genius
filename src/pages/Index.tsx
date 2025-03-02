@@ -1,4 +1,4 @@
-
+<lov-code>
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -179,14 +179,14 @@ const Index = () => {
           </div>
           
           <div className="grid md:grid-cols-2 gap-10 items-center">
-            <div className="bg-white rounded-xl shadow-lg p-6 transform transition-all duration-700 hover:shadow-2xl perspective-1000 group">
-              <h3 className="text-xl font-semibold mb-4 text-primary flex items-center">
+            <div className="bg-gradient-to-br from-nutrition-50 to-nutrition-100 rounded-xl shadow-lg p-6 transform transition-all duration-700 hover:shadow-2xl perspective-1000 group border border-nutrition-200">
+              <h3 className="text-xl font-semibold mb-4 text-nutrition-800 flex items-center">
                 <LineChart className="mr-2 h-5 w-5" />
                 Perda de Peso Consistente
               </h3>
               
               {/* Animated Chart Visualization */}
-              <div className="relative h-64 w-full overflow-hidden bg-white rounded-lg p-4">
+              <div className="relative h-64 w-full overflow-hidden bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-nutrition-200">
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-muted"></div>
                 <div className="absolute left-0 bottom-0 top-0 w-1 bg-muted"></div>
                 
@@ -268,10 +268,10 @@ const Index = () => {
               </div>
               
               <div className="mt-4 text-center">
-                <p className="text-muted-foreground text-sm">Média de perda de peso dos usuários em 6 meses</p>
+                <p className="text-nutrition-700 text-sm font-medium">Média de perda de peso dos usuários em 6 meses</p>
                 <button 
                   onClick={() => {setIsAnimating(false); setTimeout(() => setIsAnimating(true), 300);}}
-                  className="mt-2 text-xs text-nutrition-700 hover:underline flex items-center justify-center mx-auto"
+                  className="mt-2 text-sm text-nutrition-800 hover:underline flex items-center justify-center mx-auto font-medium"
                 >
                   <TrendingUp className="h-3 w-3 mr-1" />
                   Replay animação
@@ -522,33 +522,4 @@ const Index = () => {
                   
                   <div className="mb-4 relative z-10">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="inline-block h-5 w-5 text-yellow-500 fill-current transform transition-transform duration-300 hover:scale-125" />
-                    ))}
-                  </div>
-                  
-                  <div className="relative">
-                    <span className="text-6xl text-nutrition-700 opacity-20 absolute -top-6 -left-2">"</span>
-                    <p className="mb-6 text-muted-foreground relative z-10">{testimonial.content}</p>
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 mr-3">
-                        <div className="h-12 w-12 rounded-full bg-nutrition-100 flex items-center justify-center">
-                          <User className="h-6 w-6 text-nutrition-700" />
-                        </div>
-                      </div>
-                      <div>
-                        <h4 className="font-medium">{testimonial.name}</h4>
-                        <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-    </MainLayout>
-  );
-};
-
-export default Index;
+                      <Star key={i} className="inline-block h-5
