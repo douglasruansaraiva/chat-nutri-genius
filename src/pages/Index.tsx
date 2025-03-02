@@ -1,4 +1,4 @@
-<lov-code>
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -527,4 +527,28 @@ const Index = () => {
                   </div>
                   
                   <div className="relative">
-                    <span className="
+                    <span className="text-6xl text-nutrition-700 opacity-20 absolute -top-6 -left-2">"</span>
+                    <p className="mb-6 text-muted-foreground relative z-10">{testimonial.content}</p>
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 mr-3">
+                        <div className="h-12 w-12 rounded-full bg-nutrition-100 flex items-center justify-center">
+                          <User className="h-6 w-6 text-nutrition-700" />
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="font-medium">{testimonial.name}</h4>
+                        <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+    </MainLayout>
+  );
+};
+
+export default Index;
