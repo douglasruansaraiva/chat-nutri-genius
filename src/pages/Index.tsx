@@ -403,7 +403,7 @@ const Index = () => {
             <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-primary/20 transform -translate-x-1/2 hidden md:block"></div>
             
             <div className="grid md:grid-cols-3 gap-8 relative bg-zinc-950">
-              <div className="text-center p-6 bg-white rounded-xl shadow-md transform transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
+              <div className="text-center p-6 rounded-xl shadow-md transform transition-all duration-300 hover:shadow-xl hover:-translate-y-2 bg-zinc-900">
                 <div className="h-14 w-14 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center mx-auto mb-4 relative z-10">
                   1
                 </div>
@@ -414,7 +414,7 @@ const Index = () => {
                 <img src="https://images.unsplash.com/photo-1578758837674-93ed0ab5fbab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Frutas variadas e coloridas" className="mt-4 rounded-lg shadow-md w-full h-32 object-cover" />
               </div>
               
-              <div className="text-center p-6 bg-white rounded-xl shadow-md transform transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
+              <div className="text-center p-6 rounded-xl shadow-md transform transition-all duration-300 hover:shadow-xl hover:-translate-y-2 bg-zinc-900">
                 <div className="h-14 w-14 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center mx-auto mb-4 relative z-10">
                   2
                 </div>
@@ -425,7 +425,7 @@ const Index = () => {
                 <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Pessoa com frutas e vegetais" className="mt-4 rounded-lg shadow-md w-full h-32 object-cover" />
               </div>
               
-              <div className="text-center p-6 bg-white rounded-xl shadow-md transform transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
+              <div className="text-center p-6 rounded-xl shadow-md transform transition-all duration-300 hover:shadow-xl hover:-translate-y-2 bg-zinc-900">
                 <div className="h-14 w-14 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center mx-auto mb-4 relative z-10">
                   3
                 </div>
