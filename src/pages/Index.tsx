@@ -1,4 +1,4 @@
-<lov-code>
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -522,4 +522,56 @@ const Index = () => {
                   
                   <div className="mb-4 relative z-10">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="inline-block h-5
+                      <Star key={i} className="inline-block h-5 w-5 text-yellow-500 fill-current transform transition-transform duration-300 hover:scale-125" />
+                    ))}
+                  </div>
+                  
+                  <blockquote className="relative mb-4 text-nutrition-800 font-medium text-lg">
+                    "{testimonial.content}"
+                  </blockquote>
+                  
+                  <div className="flex items-center">
+                    <div className="h-12 w-12 rounded-full bg-nutrition-100 flex items-center justify-center mr-3 text-xl font-bold text-nutrition-800">
+                      {testimonial.name.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="font-semibold text-nutrition-800">{testimonial.name}</p>
+                      <p className="text-xs text-nutrition-600">{testimonial.role}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+      
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-br from-nutrition-700 to-nutrition-800 text-white">
+        <div className="container px-4 mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            Pronto para transformar sua alimentação?
+          </h2>
+          <p className="text-lg md:text-xl opacity-90 max-w-2xl mx-auto mb-8">
+            Comece sua jornada para uma vida mais saudável hoje mesmo com o NutriGênio.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild size="lg" variant="secondary" className="bg-white text-nutrition-800 hover:bg-white/90">
+              <Link to="/pricing">
+                Experimentar Grátis
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+              <Link to="/pricing">
+                Ver Planos
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+    </MainLayout>
+  );
+};
+
+export default Index;
