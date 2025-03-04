@@ -182,7 +182,7 @@ const Index = () => {
               Resultados Reais
               <span className="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-nutrition-700 to-nutrition-300 transform scale-x-0 transition-transform duration-500 origin-left animate-scale-x"></span>
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <p className="max-w-2xl mx-auto text-zinc-50">
               Veja como nossos usuários transformam seus corpos e hábitos com o NutriGênio.
             </p>
           </div>
@@ -190,7 +190,7 @@ const Index = () => {
           <div className="grid md:grid-cols-2 gap-10 items-center">
             {/* First card - Changed background to a gradient of purple tones */}
             <div className="bg-gradient-to-br from-nutrition-300 to-nutrition-600 rounded-xl shadow-lg p-6 transform transition-all duration-700 hover:shadow-2xl perspective-1000 group border border-nutrition-400 text-white bg-zinc-50">
-              <h3 className="text-xl font-semibold mb-4 text-white flex items-center">
+              <h3 className="text-xl font-semibold mb-4 flex items-center text-zinc-50">
                 <LineChart className="mr-2 h-5 w-5" />
                 Perda de Peso Consistente
               </h3>
@@ -264,7 +264,7 @@ const Index = () => {
             {/* Second card section - Changed background to a coordinated color scheme */}
             <div className="flex flex-col gap-4">
               <Card className="relative overflow-hidden group bg-gradient-to-br from-nutrition-400 to-nutrition-600 text-white border-nutrition-400">
-                <CardContent className="p-6">
+                <CardContent className="p-6 bg-zinc-950">
                   <div className="absolute top-0 right-0 w-24 h-24 bg-nutrition-300/40 rounded-bl-[60px] transform rotate-6 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12"></div>
                   
                   <div className="flex items-center mb-4 relative z-10">
@@ -291,7 +291,7 @@ const Index = () => {
               </Card>
               
               <Card className="relative overflow-hidden group bg-gradient-to-br from-nutrition-400 to-nutrition-600 text-white border-nutrition-400">
-                <CardContent className="p-6">
+                <CardContent className="p-6 bg-zinc-950">
                   <div className="absolute top-0 right-0 w-24 h-24 bg-nutrition-300/40 rounded-bl-[60px] transform rotate-6 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12"></div>
                   
                   <div className="flex items-center mb-4 relative z-10">
@@ -318,7 +318,7 @@ const Index = () => {
               </Card>
               
               <Card className="relative overflow-hidden group bg-gradient-to-br from-nutrition-400 to-nutrition-600 text-white border-nutrition-400">
-                <CardContent className="p-6">
+                <CardContent className="p-6 bg-zinc-950">
                   <div className="absolute top-0 right-0 w-24 h-24 bg-nutrition-300/40 rounded-bl-[60px] transform rotate-6 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12"></div>
                   
                   <div className="flex items-center mb-4 relative z-10">
@@ -327,11 +327,11 @@ const Index = () => {
                     </div>
                     <div>
                       <div className="flex items-center">
-                        <h3 className="text-2xl font-bold text-white animate-pulse" style={{
+                        <h3 style={{
                         animationDuration: "3s"
-                      }}>12,000+</h3>
+                      }} className="text-2xl font-bold animate-pulse text-zinc-50">12,000+</h3>
                       </div>
-                      <p className="text-white/90">usuários ativos em nossa plataforma</p>
+                      <p className="text-zinc-50">usuários ativos em nossa plataforma</p>
                     </div>
                   </div>
                 </CardContent>
