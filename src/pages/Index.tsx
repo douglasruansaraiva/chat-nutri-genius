@@ -179,14 +179,15 @@ const Index = () => {
           </div>
           
           <div className="grid md:grid-cols-2 gap-10 items-center">
-            <div className="bg-gradient-to-br from-nutrition-50 to-nutrition-100 rounded-xl shadow-lg p-6 transform transition-all duration-700 hover:shadow-2xl perspective-1000 group border border-nutrition-200">
-              <h3 className="text-xl font-semibold mb-4 text-nutrition-800 flex items-center">
+            {/* First card - Changed background to a gradient of purple tones */}
+            <div className="bg-gradient-to-br from-nutrition-300 to-nutrition-600 rounded-xl shadow-lg p-6 transform transition-all duration-700 hover:shadow-2xl perspective-1000 group border border-nutrition-400 text-white">
+              <h3 className="text-xl font-semibold mb-4 text-white flex items-center">
                 <LineChart className="mr-2 h-5 w-5" />
                 Perda de Peso Consistente
               </h3>
               
-              {/* Animated Chart Visualization */}
-              <div className="relative h-64 w-full overflow-hidden bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-nutrition-200">
+              {/* Animated Chart Visualization - Updated background to be more transparent with blur */}
+              <div className="relative h-64 w-full overflow-hidden bg-white/60 backdrop-blur-sm rounded-lg p-4 border border-nutrition-400">
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-muted"></div>
                 <div className="absolute left-0 bottom-0 top-0 w-1 bg-muted"></div>
                 
@@ -268,10 +269,10 @@ const Index = () => {
               </div>
               
               <div className="mt-4 text-center">
-                <p className="text-nutrition-700 text-sm font-medium">Média de perda de peso dos usuários em 6 meses</p>
+                <p className="text-white text-sm font-medium">Média de perda de peso dos usuários em 6 meses</p>
                 <button 
                   onClick={() => {setIsAnimating(false); setTimeout(() => setIsAnimating(true), 300);}}
-                  className="mt-2 text-sm text-nutrition-800 hover:underline flex items-center justify-center mx-auto font-medium"
+                  className="mt-2 text-sm text-white hover:underline flex items-center justify-center mx-auto font-medium"
                 >
                   <TrendingUp className="h-3 w-3 mr-1" />
                   Replay animação
@@ -279,62 +280,63 @@ const Index = () => {
               </div>
             </div>
             
+            {/* Second card section - Changed background to a coordinated color scheme */}
             <div className="flex flex-col gap-4">
-              <Card className="relative overflow-hidden group">
+              <Card className="relative overflow-hidden group bg-gradient-to-br from-nutrition-400 to-nutrition-600 text-white border-nutrition-400">
                 <CardContent className="p-6">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-nutrition-100 rounded-bl-[60px] transform rotate-6 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12"></div>
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-nutrition-300/40 rounded-bl-[60px] transform rotate-6 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12"></div>
                   
                   <div className="flex items-center mb-4 relative z-10">
-                    <div className="h-14 w-14 rounded-full bg-gradient-to-br from-nutrition-300 to-nutrition-700 flex items-center justify-center mr-4 shadow-md transform transition-transform group-hover:scale-110 duration-300">
-                      <Award className="h-8 w-8 text-white drop-shadow-sm" />
+                    <div className="h-14 w-14 rounded-full bg-gradient-to-br from-white/80 to-nutrition-300 flex items-center justify-center mr-4 shadow-md transform transition-transform group-hover:scale-110 duration-300">
+                      <Award className="h-8 w-8 text-nutrition-700 drop-shadow-sm" />
                     </div>
                     <div>
                       <div className="flex items-center">
-                        <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-nutrition-800 to-nutrition-600 animate-pulse" style={{ animationDuration: "3s" }}>93%</h3>
-                        <div className="w-16 h-6 ml-2 bg-nutrition-100 rounded-full overflow-hidden">
-                          <div className="h-full w-[93%] bg-gradient-to-r from-nutrition-700 to-nutrition-500 transform -translate-x-full animate-slide-in" style={{ animationDuration: "1.5s", animationFillMode: "forwards", animationDelay: "0.5s" }}></div>
+                        <h3 className="text-2xl font-bold text-white animate-pulse" style={{ animationDuration: "3s" }}>93%</h3>
+                        <div className="w-16 h-6 ml-2 bg-nutrition-300/50 rounded-full overflow-hidden">
+                          <div className="h-full w-[93%] bg-gradient-to-r from-white/80 to-nutrition-200 transform -translate-x-full animate-slide-in" style={{ animationDuration: "1.5s", animationFillMode: "forwards", animationDelay: "0.5s" }}></div>
                         </div>
                       </div>
-                      <p className="text-muted-foreground">dos usuários relatam melhora nos hábitos alimentares</p>
+                      <p className="text-white/90">dos usuários relatam melhora nos hábitos alimentares</p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
               
-              <Card className="relative overflow-hidden group">
+              <Card className="relative overflow-hidden group bg-gradient-to-br from-nutrition-400 to-nutrition-600 text-white border-nutrition-400">
                 <CardContent className="p-6">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-nutrition-100 rounded-bl-[60px] transform rotate-6 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12"></div>
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-nutrition-300/40 rounded-bl-[60px] transform rotate-6 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12"></div>
                   
                   <div className="flex items-center mb-4 relative z-10">
-                    <div className="h-14 w-14 rounded-full bg-gradient-to-br from-nutrition-300 to-nutrition-700 flex items-center justify-center mr-4 shadow-md transform transition-transform group-hover:scale-110 duration-300">
-                      <TrendingUp className="h-8 w-8 text-white drop-shadow-sm" />
+                    <div className="h-14 w-14 rounded-full bg-gradient-to-br from-white/80 to-nutrition-300 flex items-center justify-center mr-4 shadow-md transform transition-transform group-hover:scale-110 duration-300">
+                      <TrendingUp className="h-8 w-8 text-nutrition-700 drop-shadow-sm" />
                     </div>
                     <div>
                       <div className="flex items-center">
-                        <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-nutrition-800 to-nutrition-600 animate-pulse" style={{ animationDuration: "3s" }}>78%</h3>
-                        <div className="w-16 h-6 ml-2 bg-nutrition-100 rounded-full overflow-hidden">
-                          <div className="h-full w-[78%] bg-gradient-to-r from-nutrition-700 to-nutrition-500 transform -translate-x-full animate-slide-in" style={{ animationDuration: "1.5s", animationFillMode: "forwards", animationDelay: "0.7s" }}></div>
+                        <h3 className="text-2xl font-bold text-white animate-pulse" style={{ animationDuration: "3s" }}>78%</h3>
+                        <div className="w-16 h-6 ml-2 bg-nutrition-300/50 rounded-full overflow-hidden">
+                          <div className="h-full w-[78%] bg-gradient-to-r from-white/80 to-nutrition-200 transform -translate-x-full animate-slide-in" style={{ animationDuration: "1.5s", animationFillMode: "forwards", animationDelay: "0.7s" }}></div>
                         </div>
                       </div>
-                      <p className="text-muted-foreground">atingem seus objetivos de saúde em menos de 6 meses</p>
+                      <p className="text-white/90">atingem seus objetivos de saúde em menos de 6 meses</p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
               
-              <Card className="relative overflow-hidden group">
+              <Card className="relative overflow-hidden group bg-gradient-to-br from-nutrition-400 to-nutrition-600 text-white border-nutrition-400">
                 <CardContent className="p-6">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-nutrition-100 rounded-bl-[60px] transform rotate-6 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12"></div>
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-nutrition-300/40 rounded-bl-[60px] transform rotate-6 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12"></div>
                   
                   <div className="flex items-center mb-4 relative z-10">
-                    <div className="h-14 w-14 rounded-full bg-gradient-to-br from-nutrition-300 to-nutrition-700 flex items-center justify-center mr-4 shadow-md transform transition-transform group-hover:scale-110 duration-300">
-                      <User className="h-8 w-8 text-white drop-shadow-sm" />
+                    <div className="h-14 w-14 rounded-full bg-gradient-to-br from-white/80 to-nutrition-300 flex items-center justify-center mr-4 shadow-md transform transition-transform group-hover:scale-110 duration-300">
+                      <User className="h-8 w-8 text-nutrition-700 drop-shadow-sm" />
                     </div>
                     <div>
                       <div className="flex items-center">
-                        <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-nutrition-800 to-nutrition-600 animate-pulse" style={{ animationDuration: "3s" }}>12,000+</h3>
+                        <h3 className="text-2xl font-bold text-white animate-pulse" style={{ animationDuration: "3s" }}>12,000+</h3>
                       </div>
-                      <p className="text-muted-foreground">usuários ativos em nossa plataforma</p>
+                      <p className="text-white/90">usuários ativos em nossa plataforma</p>
                     </div>
                   </div>
                 </CardContent>
