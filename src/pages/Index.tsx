@@ -189,7 +189,7 @@ const Index = () => {
           
           <div className="grid md:grid-cols-2 gap-10 items-center">
             {/* First card - Changed background to a gradient of purple tones */}
-            <div className="bg-gradient-to-br from-nutrition-300 to-nutrition-600 rounded-xl shadow-lg p-6 transform transition-all duration-700 hover:shadow-2xl perspective-1000 group border border-nutrition-400 text-white">
+            <div className="bg-gradient-to-br from-nutrition-300 to-nutrition-600 rounded-xl shadow-lg p-6 transform transition-all duration-700 hover:shadow-2xl perspective-1000 group border border-nutrition-400 text-white bg-zinc-50">
               <h3 className="text-xl font-semibold mb-4 text-white flex items-center">
                 <LineChart className="mr-2 h-5 w-5" />
                 Perda de Peso Consistente
@@ -475,7 +475,7 @@ const Index = () => {
                     {[...Array(5)].map((_, i) => <Star key={i} className="inline-block h-5 w-5 text-yellow-500 fill-current transform transition-transform duration-300 hover:scale-125" />)}
                   </div>
                   
-                  <blockquote className="relative mb-4 text-nutrition-800 font-medium text-lg">
+                  <blockquote className="relative mb-4 text-nutrition-800 font-medium text-lg bg-zinc-950">
                     "{testimonial.content}"
                   </blockquote>
                   
@@ -484,8 +484,8 @@ const Index = () => {
                       {testimonial.name.charAt(0)}
                     </div>
                     <div>
-                      <p className="font-semibold text-nutrition-800">{testimonial.name}</p>
-                      <p className="text-xs text-nutrition-600">{testimonial.role}</p>
+                      <p className="font-semibold text-zinc-50">{testimonial.name}</p>
+                      <p className="text-xs text-zinc-50">{testimonial.role}</p>
                     </div>
                   </div>
                 </CardContent>
