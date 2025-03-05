@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import MainLayout from "@/layouts/MainLayout";
 import { ArrowRight, MessageSquare, LineChart, Calendar, User, Check, BarChart, TrendingUp, Award, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+
 const features = [{
   icon: MessageSquare,
   title: "Consulta Nutricional por IA",
@@ -22,6 +23,7 @@ const features = [{
   title: "Perfil Personalizado",
   description: "Configure seu perfil com seus objetivos, preferências e restrições alimentares."
 }];
+
 const testimonials = [{
   name: "Ana Silva",
   role: "Perdeu 10kg em 3 meses",
@@ -36,61 +38,62 @@ const testimonials = [{
   content: "O assistente de IA me ajudou a otimizar minha nutrição para melhorar meu desempenho esportivo. Resultados incríveis!"
 }];
 
-// Enhanced data for animated graph
 const resultData = [{
   month: "Jan",
   weight: 80,
   calories: 2600,
-  active: false
+  active: false,
+  color: "#E5DEFF"
 }, {
   month: "Fev",
   weight: 78,
   calories: 2500,
-  active: false
+  active: false,
+  color: "#D3E4FD"
 }, {
   month: "Mar",
   weight: 75,
   calories: 2400,
-  active: false
+  active: false,
+  color: "#FEC6A1"
 }, {
   month: "Abr",
   weight: 73,
   calories: 2300,
-  active: false
+  active: false,
+  color: "#FDE1D3"
 }, {
   month: "Mai",
   weight: 70,
   calories: 2200,
-  active: false
+  active: false,
+  color: "#F2FCE2"
 }, {
   month: "Jun",
   weight: 68,
   calories: 2100,
-  active: false
+  active: false,
+  color: "#FEF7CD"
 }];
+
 const Index = () => {
   const [activeDataIndex, setActiveDataIndex] = useState(-1);
   const [isAnimating, setIsAnimating] = useState(false);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
 
-  // Modificação do primeiro useEffect para evitar rolagem automática após carregamento inicial
   useEffect(() => {
-    // Apenas rola para o topo na primeira vez que a página é carregada
     if (!initialLoadDone) {
       window.scrollTo(0, 0);
       setInitialLoadDone(true);
-      // Inicia a animação do gráfico
       setIsAnimating(true);
     }
 
-    // Animation interval for graph bars
     const animationInterval = setInterval(() => {
       setActiveDataIndex(prev => {
         const newIndex = prev + 1;
         if (newIndex >= resultData.length) {
           clearInterval(animationInterval);
           setTimeout(() => {
-            // Reset animation after a few seconds
             setActiveDataIndex(-1);
             setIsAnimating(false);
             setTimeout(() => setIsAnimating(true), 500);
@@ -103,7 +106,6 @@ const Index = () => {
     return () => clearInterval(animationInterval);
   }, [isAnimating, initialLoadDone]);
 
-  // Update active state in data based on activeDataIndex
   useEffect(() => {
     if (activeDataIndex >= 0 && activeDataIndex < resultData.length) {
       resultData.forEach((item, index) => {
@@ -111,8 +113,8 @@ const Index = () => {
       });
     }
   }, [activeDataIndex]);
+
   return <MainLayout>
-      {/* Hero Section with 3D-like Elements */}
       <section className="relative pt-20 pb-16 md:pt-24 md:pb-20 overflow-hidden">
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-primary/5 rounded-bl-[100px] transform rotate-6"></div>
@@ -162,7 +164,6 @@ const Index = () => {
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/40 to-transparent mix-blend-overlay"></div>
               </div>
               
-              {/* Floating elements - Adjusted size and position to prevent overlap */}
               <div className="absolute -top-4 -right-4 w-16 h-16 bg-nutrition-300 rounded-lg shadow-lg transform rotate-12 flex items-center justify-center">
                 <BarChart className="h-6 w-6 text-white" />
               </div>
@@ -174,7 +175,6 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Results Visualization Section - Enhanced with animations */}
       <section className="py-16 bg-gradient-to-r from-muted/30 to-muted/10">
         <div className="container px-4 mx-auto">
           <div className="text-center mb-12">
@@ -188,80 +188,276 @@ const Index = () => {
           </div>
           
           <div className="grid md:grid-cols-2 gap-10 items-center">
-            {/* First card - Changed background to a gradient of purple tones */}
-            <div className="bg-gradient-to-br from-nutrition-300 to-nutrition-600 rounded-xl shadow-lg p-6 transform transition-all duration-700 hover:shadow-2xl perspective-1000 group border border-nutrition-400 text-white bg-zinc-50">
+            <div className="bg-black/60 backdrop-blur-sm rounded-xl shadow-lg p-6 transform transition-all duration-700 hover:shadow-2xl perspective-1000 group border border-white/10 hover:border-primary/30 text-white">
               <h3 className="text-xl font-semibold mb-4 flex items-center text-zinc-50">
-                <LineChart className="mr-2 h-5 w-5" />
+                <LineChart className="mr-2 h-5 w-5 text-primary" />
                 Perda de Peso Consistente
               </h3>
               
-              {/* Animated Chart Visualization - Updated background to be more transparent with blur */}
-              <div className="relative h-64 w-full overflow-hidden bg-white/60 backdrop-blur-sm rounded-lg p-4 border border-nutrition-400">
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-muted"></div>
-                <div className="absolute left-0 bottom-0 top-0 w-1 bg-muted"></div>
-                
-                <div className="flex justify-between items-end h-full relative z-10">
-                  {resultData.map((item, index) => <div key={index} className="flex flex-col items-center relative group cursor-pointer" onMouseEnter={() => !isAnimating && setActiveDataIndex(index)}>
-                      <div className={cn("w-10 rounded-t-lg transition-all duration-700 ease-out flex justify-center items-end overflow-hidden", item.active || activeDataIndex === -1 ? "bg-gradient-to-t from-nutrition-700 to-nutrition-500" : "bg-gray-200")} style={{
-                    height: item.active || activeDataIndex === -1 ? `${(80 - item.weight) / 15 * 100}%` : "0%",
-                    transitionDelay: `${index * 0.1}s`
-                  }}>
-                        <span className="text-white text-xs font-bold mb-1">{item.weight}kg</span>
-                      </div>
-                      <span className="text-xs mt-2 font-medium">{item.month}</span>
-                      
-                      {/* Tooltip on hover */}
-                      <div className={cn("absolute -top-20 left-1/2 transform -translate-x-1/2 bg-white p-2 rounded-lg shadow-lg transition-all duration-300 z-20", "opacity-0 invisible group-hover:opacity-100 group-hover:visible", "w-32 text-center")}>
-                        <p className="text-xs font-bold">{item.month}</p>
-                        <p className="text-xs text-nutrition-700">Peso: {item.weight}kg</p>
-                        <p className="text-xs text-muted-foreground">Calorias: {item.calories}</p>
-                        <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-white rotate-45"></div>
-                      </div>
-                    </div>)}
+              <div className="relative h-80 w-full overflow-hidden bg-black/40 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+                <div className="flex justify-between items-center mb-4">
+                  <h4 className="text-sm font-medium text-zinc-400">Progresso de Peso (kg)</h4>
+                  <div className="flex items-center space-x-4">
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 rounded-full bg-primary mr-1"></div>
+                      <span className="text-xs text-zinc-400">Peso</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 rounded-full bg-nutrition-300/70 mr-1"></div>
+                      <span className="text-xs text-zinc-400">Meta</span>
+                    </div>
+                  </div>
                 </div>
                 
-                {/* Y-axis labels */}
-                <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-muted-foreground pointer-events-none">
-                  <span>60kg</span>
-                  <span>70kg</span>
+                <div className="absolute left-0 right-0 top-16 bottom-8 flex flex-col justify-between">
+                  {[0, 1, 2, 3].map((_, i) => (
+                    <div key={i} className="w-full h-px bg-white/10" />
+                  ))}
+                </div>
+                
+                <div className="absolute left-0 top-16 bottom-8 flex flex-col justify-between text-xs text-zinc-400 pointer-events-none">
                   <span>80kg</span>
+                  <span>75kg</span>
+                  <span>70kg</span>
+                  <span>65kg</span>
                 </div>
                 
-                {/* Animated trend line */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{
-                padding: "20px 0"
-              }}>
-                  <defs>
-                    <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#1a811a" />
-                      <stop offset="100%" stopColor="#80b980" />
-                    </linearGradient>
-                  </defs>
-                  <path d={`M 20,${220 - (80 - 80) / 15 * 170} 
-                        L ${20 + 1 * 60},${220 - (80 - 78) / 15 * 170} 
-                        L ${20 + 2 * 60},${220 - (80 - 75) / 15 * 170} 
-                        L ${20 + 3 * 60},${220 - (80 - 73) / 15 * 170} 
-                        L ${20 + 4 * 60},${220 - (80 - 70) / 15 * 170} 
-                        L ${20 + 5 * 60},${220 - (80 - 68) / 15 * 170}`} fill="none" stroke="url(#lineGradient)" strokeWidth="3" strokeLinecap="round" strokeDasharray="500" strokeDashoffset={isAnimating ? "0" : "500"} className="transition-all duration-1500 ease-out" />
-                  {resultData.map((item, index) => <circle key={index} cx={20 + index * 60} cy={220 - (80 - item.weight) / 15 * 170} r="4" fill={item.active || activeDataIndex === -1 ? "#1a811a" : "#cccccc"} className="transition-all duration-300" style={{
-                  transitionDelay: `${index * 0.1}s`
-                }} />)}
-                </svg>
+                <div className="absolute left-12 right-4 top-16 bottom-8">
+                  <svg className="w-full h-full" viewBox="0 0 300 200" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="#0EA5E9" stopOpacity="0.4" />
+                        <stop offset="100%" stopColor="#0EA5E9" stopOpacity="0" />
+                      </linearGradient>
+                      <clipPath id="chartClip">
+                        <path 
+                          d={`M 0,${200 - (80 - 80) / 15 * 200} 
+                            L ${60},${200 - (80 - 78) / 15 * 200} 
+                            L ${120},${200 - (80 - 75) / 15 * 200} 
+                            L ${180},${200 - (80 - 73) / 15 * 200} 
+                            L ${240},${200 - (80 - 70) / 15 * 200} 
+                            L ${300},${200 - (80 - 68) / 15 * 200}
+                            L ${300},200 L 0,200 Z`}
+                          className={isAnimating ? "animate-slide-in" : ""}
+                          style={{ animationDuration: "1.5s" }}
+                        />
+                      </clipPath>
+                    </defs>
+                    
+                    <line 
+                      x1="0" y1={200 - (80 - 70) / 15 * 200} 
+                      x2="300" y2={200 - (80 - 65) / 15 * 200}
+                      stroke="#8B5CF6" 
+                      strokeWidth="1" 
+                      strokeDasharray="5,5"
+                      className="opacity-70" 
+                    />
+                    <text 
+                      x="5" 
+                      y={200 - (80 - 70) / 15 * 200 - 5} 
+                      className="text-[8px] fill-nutrition-300"
+                    >
+                      Meta
+                    </text>
+                    
+                    <path 
+                      d={`M 0,${200 - (80 - 80) / 15 * 200} 
+                        L ${60},${200 - (80 - 78) / 15 * 200} 
+                        L ${120},${200 - (80 - 75) / 15 * 200} 
+                        L ${180},${200 - (80 - 73) / 15 * 200} 
+                        L ${240},${200 - (80 - 70) / 15 * 200} 
+                        L ${300},${200 - (80 - 68) / 15 * 200}`}
+                      fill="none" 
+                      stroke="#0EA5E9" 
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeDasharray="300"
+                      strokeDashoffset={isAnimating ? "0" : "300"}
+                      className="transition-all duration-1500 ease-out"
+                    />
+                    
+                    <path 
+                      d={`M 0,${200 - (80 - 80) / 15 * 200} 
+                        L ${60},${200 - (80 - 78) / 15 * 200} 
+                        L ${120},${200 - (80 - 75) / 15 * 200} 
+                        L ${180},${200 - (80 - 73) / 15 * 200} 
+                        L ${240},${200 - (80 - 70) / 15 * 200} 
+                        L ${300},${200 - (80 - 68) / 15 * 200}`}
+                      fill="url(#areaGradient)"
+                      opacity={isAnimating ? "1" : "0"}
+                      className="transition-opacity duration-1000"
+                    />
+                    
+                    <g key={0} className="transition-transform duration-300 hover:scale-125">
+                      <circle 
+                        cx={0} 
+                        cy={200 - (80 - 80) / 15 * 200} 
+                        r="6"
+                        fill="#0EA5E9"
+                        className="transition-all duration-500"
+                        style={{ transitionDelay: "0s" }}
+                      />
+                      <circle 
+                        cx={0} 
+                        cy={200 - (80 - 80) / 15 * 200} 
+                        r="3"
+                        fill="#fff"
+                        className="transition-all duration-500"
+                        style={{ transitionDelay: "0s" }}
+                      />
+                    </g>
+                    
+                    <g key={1} className="transition-transform duration-300 hover:scale-125">
+                      <circle 
+                        cx={60} 
+                        cy={200 - (80 - 78) / 15 * 200} 
+                        r="6"
+                        fill="#0EA5E9"
+                        className="transition-all duration-500"
+                        style={{ transitionDelay: "0.1s" }}
+                      />
+                      <circle 
+                        cx={60} 
+                        cy={200 - (80 - 78) / 15 * 200} 
+                        r="3"
+                        fill="#fff"
+                        className="transition-all duration-500"
+                        style={{ transitionDelay: "0.1s" }}
+                      />
+                    </g>
+                    
+                    <g key={2} className="transition-transform duration-300 hover:scale-125">
+                      <circle 
+                        cx={120} 
+                        cy={200 - (80 - 75) / 15 * 200} 
+                        r="6"
+                        fill="#0EA5E9"
+                        className="transition-all duration-500"
+                        style={{ transitionDelay: "0.2s" }}
+                      />
+                      <circle 
+                        cx={120} 
+                        cy={200 - (80 - 75) / 15 * 200} 
+                        r="3"
+                        fill="#fff"
+                        className="transition-all duration-500"
+                        style={{ transitionDelay: "0.2s" }}
+                      />
+                    </g>
+                    
+                    <g key={3} className="transition-transform duration-300 hover:scale-125">
+                      <circle 
+                        cx={180} 
+                        cy={200 - (80 - 73) / 15 * 200} 
+                        r="6"
+                        fill="#0EA5E9"
+                        className="transition-all duration-500"
+                        style={{ transitionDelay: "0.3s" }}
+                      />
+                      <circle 
+                        cx={180} 
+                        cy={200 - (80 - 73) / 15 * 200} 
+                        r="3"
+                        fill="#fff"
+                        className="transition-all duration-500"
+                        style={{ transitionDelay: "0.3s" }}
+                      />
+                    </g>
+                    
+                    <g key={4} className="transition-transform duration-300 hover:scale-125">
+                      <circle 
+                        cx={240} 
+                        cy={200 - (80 - 70) / 15 * 200} 
+                        r="6"
+                        fill="#0EA5E9"
+                        className="transition-all duration-500"
+                        style={{ transitionDelay: "0.4s" }}
+                      />
+                      <circle 
+                        cx={240} 
+                        cy={200 - (80 - 70) / 15 * 200} 
+                        r="3"
+                        fill="#fff"
+                        className="transition-all duration-500"
+                        style={{ transitionDelay: "0.4s" }}
+                      />
+                    </g>
+                    
+                    <g key={5} className="transition-transform duration-300 hover:scale-125">
+                      <circle 
+                        cx={300} 
+                        cy={200 - (80 - 68) / 15 * 200} 
+                        r="6"
+                        fill="#0EA5E9"
+                        className="transition-all duration-500"
+                        style={{ transitionDelay: "0.5s" }}
+                      />
+                      <circle 
+                        cx={300} 
+                        cy={200 - (80 - 68) / 15 * 200} 
+                        r="3"
+                        fill="#fff"
+                        className="transition-all duration-500"
+                        style={{ transitionDelay: "0.5s" }}
+                      />
+                    </g>
+                  </svg>
+                </div>
+                
+                <div className="absolute left-12 right-4 bottom-0 flex justify-between text-xs text-zinc-400">
+                  {resultData.map((item, index) => (
+                    <div key={index} className="flex flex-col items-center">
+                      <span>{item.month}</span>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="absolute left-12 right-4 top-16 bottom-8">
+                  <div className="relative w-full h-full">
+                    {resultData.map((item, index) => (
+                      <div 
+                        key={index} 
+                        className="absolute"
+                        style={{ 
+                          left: `${index * 20}%`, 
+                          top: `${((80 - item.weight) / 15) * 100}%`,
+                          transform: "translate(-50%, -100%)"
+                        }}
+                      >
+                        <div 
+                          className={cn(
+                            "absolute bottom-full mb-2 -left-14 w-28 bg-black p-2 rounded text-center text-xs transform scale-0 opacity-0 pointer-events-none transition-all duration-200",
+                            activeDataIndex === index ? "scale-100 opacity-100" : ""
+                          )}
+                          style={{ transitionDelay: activeDataIndex === index ? "0.3s" : "0s" }}
+                        >
+                          <div className="font-semibold text-primary">{item.month}</div>
+                          <div className="text-zinc-300">Peso: {item.weight}kg</div>
+                          <div className="text-zinc-500">Cal: {item.calories}</div>
+                          <div className="absolute -bottom-1 left-1/2 w-2 h-2 bg-black transform rotate-45 -translate-x-1/2"></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
               
               <div className="mt-4 text-center">
-                <p className="text-white text-sm font-medium">Média de perda de peso dos usuários em 6 meses</p>
-                <button onClick={() => {
-                setIsAnimating(false);
-                setTimeout(() => setIsAnimating(true), 300);
-              }} className="mt-2 text-sm text-white hover:underline flex items-center justify-center mx-auto font-medium">
+                <p className="text-zinc-400 text-sm">Média de perda de peso dos usuários em 6 meses</p>
+                <button 
+                  onClick={() => {
+                    setIsAnimating(false);
+                    setTimeout(() => setIsAnimating(true), 300);
+                  }} 
+                  className="mt-2 text-sm text-primary hover:text-primary/80 flex items-center justify-center mx-auto"
+                >
                   <TrendingUp className="h-3 w-3 mr-1" />
                   Replay animação
                 </button>
               </div>
             </div>
             
-            {/* Second card section - Changed background to a coordinated color scheme */}
             <div className="flex flex-col gap-4">
               <Card className="relative overflow-hidden group bg-gradient-to-br from-nutrition-400 to-nutrition-600 text-white border-nutrition-400">
                 <CardContent className="p-6 bg-zinc-950">
@@ -341,7 +537,6 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Feature Section with Enhanced 3D Cards */}
       <section className="py-16">
         <div className="container px-4 mx-auto">
           <div className="text-center mb-12">
@@ -366,16 +561,14 @@ const Index = () => {
                   </h3>
                   <p className="text-muted-foreground">{feature.description}</p>
                 </CardContent>
-                {/* Background decorative elements - Reduced size and repositioned */}
                 <div className="absolute top-0 right-0 w-16 h-16 bg-nutrition-50 rounded-bl-[30px] transform rotate-12 -z-0 opacity-50 group-hover:rotate-45 group-hover:scale-125 transition-all duration-700"></div>
                 <div className="absolute bottom-0 left-0 w-14 h-14 bg-nutrition-100 rounded-tr-[25px] transform -rotate-12 -z-0 opacity-40 group-hover:rotate-45 group-hover:scale-125 transition-all duration-700"></div>
                 
-                {/* Add fruit images as decorative elements */}
                 {index === 0 && <div className="absolute -bottom-2 -right-2 w-12 h-12 rounded-full overflow-hidden opacity-80">
                     <img src="https://images.unsplash.com/photo-1528825871115-3581a5387919?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Fruta" className="w-full h-full object-cover" />
                   </div>}
                 {index === 1 && <div className="absolute -bottom-2 -right-2 w-12 h-12 rounded-full overflow-hidden opacity-80">
-                    <img src="https://images.unsplash.com/photo-1519996529931-28324d5a630e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Fruta" className="w-full h-full object-cover" />
+                    <img src="https://images.unsplash.com/photo-1490885578174-acda8905c2c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Fruta" className="w-full h-full object-cover" />
                   </div>}
                 {index === 2 && <div className="absolute -bottom-2 -right-2 w-12 h-12 rounded-full overflow-hidden opacity-80">
                     <img src="https://images.unsplash.com/photo-1550258987-190a2d41a8ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Fruta" className="w-full h-full object-cover" />
@@ -388,7 +581,6 @@ const Index = () => {
         </div>
       </section>
       
-      {/* How It Works with Visual Timeline - Enhanced with animations */}
       <section className="py-16 bg-muted/30">
         <div className="container px-4 mx-auto">
           <div className="text-center mb-12">
@@ -399,7 +591,6 @@ const Index = () => {
           </div>
           
           <div className="relative">
-            {/* Timeline line */}
             <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-primary/20 transform -translate-x-1/2 hidden md:block"></div>
             
             <div className="grid md:grid-cols-3 gap-8 relative bg-zinc-950">
@@ -450,7 +641,6 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Testimonials with Enhanced Visual Design */}
       <section className="py-16">
         <div className="container px-4 mx-auto">
           <div className="text-center mb-12">
@@ -466,7 +656,6 @@ const Index = () => {
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((testimonial, index) => <Card key={index} className="overflow-hidden transform transition-all duration-500 hover:shadow-xl perspective-1000 hover:rotate-y-5 group">
                 <CardContent className="p-6 relative">
-                  {/* Add fruit image as decorative element */}
                   <div className="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full z-0 opacity-20 overflow-hidden">
                     <img src={`https://images.unsplash.com/photo-${index === 0 ? '1490474418585-ba9bad8fd0ea' : index === 1 ? '1490885578174-acda8905c2c6' : '1457296898342-cba958b01f45'}?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80`} alt="Decoração de frutas" className="w-full h-full object-cover" />
                   </div>
@@ -494,7 +683,6 @@ const Index = () => {
         </div>
       </section>
       
-      {/* CTA Section */}
       <section className="py-20 bg-gradient-to-br from-nutrition-700 to-nutrition-800 text-white">
         <div className="container px-4 mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
@@ -520,4 +708,5 @@ const Index = () => {
       </section>
     </MainLayout>;
 };
+
 export default Index;
