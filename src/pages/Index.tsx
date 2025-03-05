@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import MainLayout from "@/layouts/MainLayout";
 import { ArrowRight, MessageSquare, LineChart, Calendar, User, Check, BarChart, TrendingUp, Award, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 
 const features = [{
   icon: MessageSquare,
@@ -76,10 +77,25 @@ const resultData = [{
   color: "#FACC15"
 }];
 
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-zinc-900 border-2 border-primary rounded-md p-3 shadow-[0_0_20px_rgba(16,185,129,0.5)]">
+        <p className="text-primary font-bold text-lg">{label}</p>
+        <p className="text-white font-semibold">Peso: {payload[0].value}kg</p>
+        <p className="text-white/80">Calorias: {resultData.find(item => item.month === label)?.calories}</p>
+      </div>
+    );
+  }
+
+  return null;
+};
+
 const Index = () => {
   const [activeDataIndex, setActiveDataIndex] = useState(-1);
   const [isAnimating, setIsAnimating] = useState(false);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
+  const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
     if (!initialLoadDone) {
@@ -88,31 +104,31 @@ const Index = () => {
       setIsAnimating(true);
     }
 
-    const animationInterval = setInterval(() => {
-      setActiveDataIndex(prev => {
-        const newIndex = prev + 1;
-        if (newIndex >= resultData.length) {
-          clearInterval(animationInterval);
-          setTimeout(() => {
-            setActiveDataIndex(-1);
-            setIsAnimating(false);
-            setTimeout(() => setIsAnimating(true), 500);
-          }, 2000);
-          return -1;
-        }
-        return newIndex;
-      });
-    }, 600);
-    return () => clearInterval(animationInterval);
+    if (isAnimating) {
+      setChartData([]);
+      
+      const timeout = setTimeout(() => {
+        const animationInterval = setInterval(() => {
+          setChartData(prevData => {
+            if (prevData.length >= resultData.length) {
+              clearInterval(animationInterval);
+              return prevData;
+            }
+            return [...prevData, resultData[prevData.length]];
+          });
+        }, 500);
+        
+        return () => clearInterval(animationInterval);
+      }, 500);
+      
+      return () => clearTimeout(timeout);
+    }
   }, [isAnimating, initialLoadDone]);
 
-  useEffect(() => {
-    if (activeDataIndex >= 0 && activeDataIndex < resultData.length) {
-      resultData.forEach((item, index) => {
-        resultData[index].active = index <= activeDataIndex;
-      });
-    }
-  }, [activeDataIndex]);
+  const restartAnimation = () => {
+    setIsAnimating(false);
+    setTimeout(() => setIsAnimating(true), 300);
+  };
 
   return <MainLayout>
       <section className="relative pt-20 pb-16 md:pt-24 md:pb-20 overflow-hidden">
@@ -188,13 +204,13 @@ const Index = () => {
           </div>
           
           <div className="grid md:grid-cols-2 gap-10 items-center">
-            <div className="glass-panel rounded-xl shadow-lg p-6 transform transition-all duration-700 hover:shadow-2xl perspective-1000 group border border-white/10 hover:border-primary/30 text-white">
+            <div className="glass-panel rounded-xl shadow-lg p-6 transform transition-all duration-700 hover:shadow-2xl perspective-1000 group border border-white/20 hover:border-primary/40 text-white bg-zinc-900/80 backdrop-blur-sm">
               <h3 className="text-xl font-semibold mb-4 flex items-center text-zinc-50">
                 <LineChart className="mr-2 h-5 w-5 text-primary" />
                 Perda de Peso Consistente
               </h3>
               
-              <div className="relative h-80 w-full overflow-hidden glass-panel rounded-lg p-4 border border-white/10">
+              <div className="relative h-80 w-full overflow-hidden glass-panel rounded-lg p-4 border border-white/20 bg-zinc-950/70">
                 <div className="flex justify-between items-center mb-4">
                   <h4 className="text-sm font-medium text-white">Progresso de Peso (kg)</h4>
                   <div className="flex items-center space-x-4">
@@ -209,171 +225,69 @@ const Index = () => {
                   </div>
                 </div>
                 
-                <div className="absolute left-0 right-0 top-16 bottom-8 flex flex-col justify-between">
-                  {[0, 1, 2, 3].map((_, i) => (
-                    <div key={i} className="w-full h-px bg-white/20" />
-                  ))}
-                </div>
-                
-                <div className="absolute left-0 top-16 bottom-8 flex flex-col justify-between text-xs text-white pointer-events-none">
-                  <span className="font-medium">80kg</span>
-                  <span className="font-medium">75kg</span>
-                  <span className="font-medium">70kg</span>
-                  <span className="font-medium">65kg</span>
-                </div>
-                
-                <div className="absolute left-12 right-4 top-16 bottom-8">
-                  <svg className="w-full h-full" viewBox="0 0 300 200" preserveAspectRatio="none">
-                    <defs>
-                      <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#10B981" stopOpacity="0.6" />
-                        <stop offset="100%" stopColor="#10B981" stopOpacity="0.1" />
-                      </linearGradient>
-                      <clipPath id="chartClip">
-                        <path 
-                          d={`M 0,${200 - (80 - 80) / 15 * 200} 
-                            L ${60},${200 - (80 - 78) / 15 * 200} 
-                            L ${120},${200 - (80 - 75) / 15 * 200} 
-                            L ${180},${200 - (80 - 73) / 15 * 200} 
-                            L ${240},${200 - (80 - 70) / 15 * 200} 
-                            L ${300},${200 - (80 - 68) / 15 * 200}
-                            L ${300},200 L 0,200 Z`}
-                          className={isAnimating ? "animate-slide-in" : ""}
-                          style={{ animationDuration: "1.5s" }}
-                        />
-                      </clipPath>
-                    </defs>
-                    
-                    <line 
-                      x1="0" y1={200 - (80 - 70) / 15 * 200} 
-                      x2="300" y2={200 - (80 - 65) / 15 * 200}
-                      stroke="#8B5CF6" 
-                      strokeWidth="2" 
-                      strokeDasharray="5,5"
-                      className="opacity-100" 
-                    />
-                    <text 
-                      x="8" 
-                      y={200 - (80 - 70) / 15 * 200 - 5} 
-                      className="text-[10px] fill-purple-500 font-bold"
+                <div className="h-[calc(100%-32px)] w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart
+                      data={chartData}
+                      margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
                     >
-                      Meta
-                    </text>
-                    
-                    <path 
-                      d={`M 0,${200 - (80 - 80) / 15 * 200} 
-                        L ${60},${200 - (80 - 78) / 15 * 200} 
-                        L ${120},${200 - (80 - 75) / 15 * 200} 
-                        L ${180},${200 - (80 - 73) / 15 * 200} 
-                        L ${240},${200 - (80 - 70) / 15 * 200} 
-                        L ${300},${200 - (80 - 68) / 15 * 200}`}
-                      fill="none" 
-                      stroke="#10B981" 
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeDasharray="300"
-                      strokeDashoffset={isAnimating ? "0" : "300"}
-                      className="transition-all duration-1500 ease-out"
-                    />
-                    
-                    <path 
-                      d={`M 0,${200 - (80 - 80) / 15 * 200} 
-                        L ${60},${200 - (80 - 78) / 15 * 200} 
-                        L ${120},${200 - (80 - 75) / 15 * 200} 
-                        L ${180},${200 - (80 - 73) / 15 * 200} 
-                        L ${240},${200 - (80 - 70) / 15 * 200} 
-                        L ${300},${200 - (80 - 68) / 15 * 200}`}
-                      fill="url(#areaGradient)"
-                      opacity={isAnimating ? "1" : "0"}
-                      className="transition-opacity duration-1000"
-                    />
-                    
-                    {resultData.map((item, index) => {
-                      const x = index * 60;
-                      const y = 200 - (80 - item.weight) / 15 * 200;
-                      return (
-                        <g key={index} className="transition-transform duration-300 hover:scale-125 cursor-pointer">
-                          <circle 
-                            cx={x} 
-                            cy={y} 
-                            r="6"
-                            fill={item.color}
-                            className="transition-all duration-500"
-                            style={{ transitionDelay: `${index * 0.1}s` }}
-                          />
-                          <circle 
-                            cx={x} 
-                            cy={y} 
-                            r="3"
-                            fill="#fff"
-                            className="transition-all duration-500"
-                            style={{ transitionDelay: `${index * 0.1}s` }}
-                          />
-                        </g>
-                      );
-                    })}
-                  </svg>
-                </div>
-                
-                <div className="absolute left-12 right-4 bottom-0 flex justify-between text-xs text-white font-medium">
-                  {resultData.map((item, index) => (
-                    <div key={index} className="flex flex-col items-center">
-                      <span>{item.month}</span>
-                    </div>
-                  ))}
-                </div>
-                
-                <div className="absolute left-12 right-4 top-16 bottom-8">
-                  <div className="relative w-full h-full">
-                    {resultData.map((item, index) => (
-                      <div 
-                        key={index} 
-                        className="absolute"
-                        style={{ 
-                          left: `${index * 20}%`, 
-                          top: `${((80 - item.weight) / 15) * 100}%`,
-                          transform: "translate(-50%, -100%)"
+                      <defs>
+                        <linearGradient id="colorWeight" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#10B981" stopOpacity={0.8} />
+                          <stop offset="95%" stopColor="#10B981" stopOpacity={0.1} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#333" opacity={0.3} />
+                      <XAxis 
+                        dataKey="month" 
+                        stroke="#fff" 
+                        tick={{ fill: '#fff' }}
+                        axisLine={{ stroke: '#555' }}
+                      />
+                      <YAxis 
+                        domain={[65, 80]} 
+                        stroke="#fff" 
+                        tick={{ fill: '#fff' }}
+                        axisLine={{ stroke: '#555' }}
+                        label={{ value: 'Peso (kg)', angle: -90, position: 'insideLeft', fill: '#fff', dx: -10 }}
+                      />
+                      <Tooltip 
+                        content={<CustomTooltip />}
+                        cursor={{ stroke: '#10B981', strokeWidth: 2, strokeDasharray: '5 5' }}
+                      />
+                      <ReferenceLine 
+                        y={70} 
+                        label={{ value: "Meta", position: 'insideTopRight', fill: '#8B5CF6' }} 
+                        stroke="#8B5CF6" 
+                        strokeDasharray="5 5" 
+                        strokeWidth={2}
+                      />
+                      <Area 
+                        type="monotone" 
+                        dataKey="weight" 
+                        stroke="#10B981" 
+                        strokeWidth={3}
+                        fill="url(#colorWeight)" 
+                        activeDot={{ 
+                          r: 8, 
+                          fill: "#10B981", 
+                          stroke: "#fff", 
+                          strokeWidth: 2,
+                          className: "animate-pulse"
                         }}
-                      >
-                        <div 
-                          className={cn(
-                            "absolute bottom-full mb-2 -left-14 w-28 bg-zinc-900/90 border-2 border-primary p-2 rounded-md text-center text-xs transform scale-0 opacity-0 pointer-events-none transition-all duration-200 shadow-[0_0_20px_rgba(16,185,129,0.5)]",
-                            activeDataIndex === index ? "scale-100 opacity-100" : ""
-                          )}
-                          style={{ transitionDelay: activeDataIndex === index ? "0.3s" : "0s" }}
-                        >
-                          <div className="font-semibold text-primary text-sm">{item.month}</div>
-                          <div className="text-white font-bold">Peso: {item.weight}kg</div>
-                          <div className="text-white/80">Cal: {item.calories}</div>
-                          <div className="absolute -bottom-2 left-1/2 w-4 h-4 bg-zinc-900/90 border-r-2 border-b-2 border-primary transform rotate-45 -translate-x-1/2"></div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                        isAnimationActive={true}
+                        animationDuration={1000}
+                        animationEasing="ease-out"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
                 </div>
-                
-                {resultData.map((item, index) => (
-                  <div 
-                    key={`label-${index}`}
-                    className="absolute text-xs font-bold text-white/80"
-                    style={{ 
-                      left: `${(index * 20) + 12}%`, 
-                      top: `${((80 - item.weight) / 15) * 70 + 22}%`,
-                    }}
-                  >
-                    {item.weight}kg
-                  </div>
-                ))}
               </div>
               
               <div className="mt-4 text-center">
                 <p className="text-white text-sm">Média de perda de peso dos usuários em 6 meses</p>
                 <button 
-                  onClick={() => {
-                    setIsAnimating(false);
-                    setTimeout(() => setIsAnimating(true), 300);
-                  }} 
+                  onClick={restartAnimation} 
                   className="mt-2 text-sm text-primary hover:text-primary/80 flex items-center justify-center mx-auto"
                 >
                   <TrendingUp className="h-3 w-3 mr-1" />
