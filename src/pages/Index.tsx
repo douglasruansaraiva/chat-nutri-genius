@@ -77,7 +77,7 @@ const resultData = [{
   color: "#FACC15"
 }];
 
-const CustomTooltip = ({ active, payload, label }) => {
+const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: any[]; label?: string }) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-zinc-900 border-2 border-primary rounded-md p-3 shadow-[0_0_20px_rgba(16,185,129,0.5)]">
@@ -106,7 +106,7 @@ const Index = () => {
 
     if (isAnimating) {
       setChartData([]);
-      
+
       const timeout = setTimeout(() => {
         const animationInterval = setInterval(() => {
           setChartData(prevData => {
