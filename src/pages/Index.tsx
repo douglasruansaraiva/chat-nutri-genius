@@ -338,15 +338,15 @@ const Index = () => {
                       >
                         <div 
                           className={cn(
-                            "absolute bottom-full mb-2 -left-14 w-28 bg-black border border-white/30 p-2 rounded text-center text-xs transform scale-0 opacity-0 pointer-events-none transition-all duration-200 shadow-[0_0_15px_rgba(255,255,255,0.15)]",
+                            "absolute bottom-full mb-2 -left-14 w-28 bg-zinc-900/90 border-2 border-primary p-2 rounded-md text-center text-xs transform scale-0 opacity-0 pointer-events-none transition-all duration-200 shadow-[0_0_20px_rgba(16,185,129,0.5)]",
                             activeDataIndex === index ? "scale-100 opacity-100" : ""
                           )}
                           style={{ transitionDelay: activeDataIndex === index ? "0.3s" : "0s" }}
                         >
-                          <div className="font-semibold text-primary">{item.month}</div>
-                          <div className="text-white font-medium">Peso: {item.weight}kg</div>
-                          <div className="text-gray-300">Cal: {item.calories}</div>
-                          <div className="absolute -bottom-1 left-1/2 w-2 h-2 bg-black border-r border-b border-white/30 transform rotate-45 -translate-x-1/2"></div>
+                          <div className="font-semibold text-primary text-sm">{item.month}</div>
+                          <div className="text-white font-bold">Peso: {item.weight}kg</div>
+                          <div className="text-white/80">Cal: {item.calories}</div>
+                          <div className="absolute -bottom-2 left-1/2 w-4 h-4 bg-zinc-900/90 border-r-2 border-b-2 border-primary transform rotate-45 -translate-x-1/2"></div>
                         </div>
                       </div>
                     ))}
