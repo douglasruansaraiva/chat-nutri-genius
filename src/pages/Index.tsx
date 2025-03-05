@@ -43,37 +43,37 @@ const resultData = [{
   weight: 80,
   calories: 2600,
   active: false,
-  color: "#E5DEFF"
+  color: "#8B5CF6"
 }, {
   month: "Fev",
   weight: 78,
   calories: 2500,
   active: false,
-  color: "#D3E4FD"
+  color: "#D946EF"
 }, {
   month: "Mar",
   weight: 75,
   calories: 2400,
   active: false,
-  color: "#FEC6A1"
+  color: "#F97316"
 }, {
   month: "Abr",
   weight: 73,
   calories: 2300,
   active: false,
-  color: "#FDE1D3"
+  color: "#0EA5E9"
 }, {
   month: "Mai",
   weight: 70,
   calories: 2200,
   active: false,
-  color: "#F2FCE2"
+  color: "#10B981"
 }, {
   month: "Jun",
   weight: 68,
   calories: 2100,
   active: false,
-  color: "#FEF7CD"
+  color: "#FACC15"
 }];
 
 const Index = () => {
@@ -188,46 +188,46 @@ const Index = () => {
           </div>
           
           <div className="grid md:grid-cols-2 gap-10 items-center">
-            <div className="bg-black/60 backdrop-blur-sm rounded-xl shadow-lg p-6 transform transition-all duration-700 hover:shadow-2xl perspective-1000 group border border-white/10 hover:border-primary/30 text-white">
+            <div className="glass-panel rounded-xl shadow-lg p-6 transform transition-all duration-700 hover:shadow-2xl perspective-1000 group border border-white/10 hover:border-primary/30 text-white">
               <h3 className="text-xl font-semibold mb-4 flex items-center text-zinc-50">
                 <LineChart className="mr-2 h-5 w-5 text-primary" />
                 Perda de Peso Consistente
               </h3>
               
-              <div className="relative h-80 w-full overflow-hidden bg-black/40 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+              <div className="relative h-80 w-full overflow-hidden glass-panel rounded-lg p-4 border border-white/10">
                 <div className="flex justify-between items-center mb-4">
-                  <h4 className="text-sm font-medium text-zinc-400">Progresso de Peso (kg)</h4>
+                  <h4 className="text-sm font-medium text-white">Progresso de Peso (kg)</h4>
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center">
                       <div className="w-3 h-3 rounded-full bg-primary mr-1"></div>
-                      <span className="text-xs text-zinc-400">Peso</span>
+                      <span className="text-xs text-white">Peso</span>
                     </div>
                     <div className="flex items-center">
-                      <div className="w-3 h-3 rounded-full bg-nutrition-300/70 mr-1"></div>
-                      <span className="text-xs text-zinc-400">Meta</span>
+                      <div className="w-3 h-3 rounded-full bg-purple-500 mr-1"></div>
+                      <span className="text-xs text-white">Meta</span>
                     </div>
                   </div>
                 </div>
                 
                 <div className="absolute left-0 right-0 top-16 bottom-8 flex flex-col justify-between">
                   {[0, 1, 2, 3].map((_, i) => (
-                    <div key={i} className="w-full h-px bg-white/10" />
+                    <div key={i} className="w-full h-px bg-white/20" />
                   ))}
                 </div>
                 
-                <div className="absolute left-0 top-16 bottom-8 flex flex-col justify-between text-xs text-zinc-400 pointer-events-none">
-                  <span>80kg</span>
-                  <span>75kg</span>
-                  <span>70kg</span>
-                  <span>65kg</span>
+                <div className="absolute left-0 top-16 bottom-8 flex flex-col justify-between text-xs text-white pointer-events-none">
+                  <span className="font-medium">80kg</span>
+                  <span className="font-medium">75kg</span>
+                  <span className="font-medium">70kg</span>
+                  <span className="font-medium">65kg</span>
                 </div>
                 
                 <div className="absolute left-12 right-4 top-16 bottom-8">
                   <svg className="w-full h-full" viewBox="0 0 300 200" preserveAspectRatio="none">
                     <defs>
                       <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#0EA5E9" stopOpacity="0.4" />
-                        <stop offset="100%" stopColor="#0EA5E9" stopOpacity="0" />
+                        <stop offset="0%" stopColor="#10B981" stopOpacity="0.6" />
+                        <stop offset="100%" stopColor="#10B981" stopOpacity="0.1" />
                       </linearGradient>
                       <clipPath id="chartClip">
                         <path 
@@ -248,14 +248,14 @@ const Index = () => {
                       x1="0" y1={200 - (80 - 70) / 15 * 200} 
                       x2="300" y2={200 - (80 - 65) / 15 * 200}
                       stroke="#8B5CF6" 
-                      strokeWidth="1" 
+                      strokeWidth="2" 
                       strokeDasharray="5,5"
-                      className="opacity-70" 
+                      className="opacity-100" 
                     />
                     <text 
-                      x="5" 
+                      x="8" 
                       y={200 - (80 - 70) / 15 * 200 - 5} 
-                      className="text-[8px] fill-nutrition-300"
+                      className="text-[10px] fill-purple-500 font-bold"
                     >
                       Meta
                     </text>
@@ -268,7 +268,7 @@ const Index = () => {
                         L ${240},${200 - (80 - 70) / 15 * 200} 
                         L ${300},${200 - (80 - 68) / 15 * 200}`}
                       fill="none" 
-                      stroke="#0EA5E9" 
+                      stroke="#10B981" 
                       strokeWidth="3"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -289,123 +289,34 @@ const Index = () => {
                       className="transition-opacity duration-1000"
                     />
                     
-                    <g key={0} className="transition-transform duration-300 hover:scale-125">
-                      <circle 
-                        cx={0} 
-                        cy={200 - (80 - 80) / 15 * 200} 
-                        r="6"
-                        fill="#0EA5E9"
-                        className="transition-all duration-500"
-                        style={{ transitionDelay: "0s" }}
-                      />
-                      <circle 
-                        cx={0} 
-                        cy={200 - (80 - 80) / 15 * 200} 
-                        r="3"
-                        fill="#fff"
-                        className="transition-all duration-500"
-                        style={{ transitionDelay: "0s" }}
-                      />
-                    </g>
-                    
-                    <g key={1} className="transition-transform duration-300 hover:scale-125">
-                      <circle 
-                        cx={60} 
-                        cy={200 - (80 - 78) / 15 * 200} 
-                        r="6"
-                        fill="#0EA5E9"
-                        className="transition-all duration-500"
-                        style={{ transitionDelay: "0.1s" }}
-                      />
-                      <circle 
-                        cx={60} 
-                        cy={200 - (80 - 78) / 15 * 200} 
-                        r="3"
-                        fill="#fff"
-                        className="transition-all duration-500"
-                        style={{ transitionDelay: "0.1s" }}
-                      />
-                    </g>
-                    
-                    <g key={2} className="transition-transform duration-300 hover:scale-125">
-                      <circle 
-                        cx={120} 
-                        cy={200 - (80 - 75) / 15 * 200} 
-                        r="6"
-                        fill="#0EA5E9"
-                        className="transition-all duration-500"
-                        style={{ transitionDelay: "0.2s" }}
-                      />
-                      <circle 
-                        cx={120} 
-                        cy={200 - (80 - 75) / 15 * 200} 
-                        r="3"
-                        fill="#fff"
-                        className="transition-all duration-500"
-                        style={{ transitionDelay: "0.2s" }}
-                      />
-                    </g>
-                    
-                    <g key={3} className="transition-transform duration-300 hover:scale-125">
-                      <circle 
-                        cx={180} 
-                        cy={200 - (80 - 73) / 15 * 200} 
-                        r="6"
-                        fill="#0EA5E9"
-                        className="transition-all duration-500"
-                        style={{ transitionDelay: "0.3s" }}
-                      />
-                      <circle 
-                        cx={180} 
-                        cy={200 - (80 - 73) / 15 * 200} 
-                        r="3"
-                        fill="#fff"
-                        className="transition-all duration-500"
-                        style={{ transitionDelay: "0.3s" }}
-                      />
-                    </g>
-                    
-                    <g key={4} className="transition-transform duration-300 hover:scale-125">
-                      <circle 
-                        cx={240} 
-                        cy={200 - (80 - 70) / 15 * 200} 
-                        r="6"
-                        fill="#0EA5E9"
-                        className="transition-all duration-500"
-                        style={{ transitionDelay: "0.4s" }}
-                      />
-                      <circle 
-                        cx={240} 
-                        cy={200 - (80 - 70) / 15 * 200} 
-                        r="3"
-                        fill="#fff"
-                        className="transition-all duration-500"
-                        style={{ transitionDelay: "0.4s" }}
-                      />
-                    </g>
-                    
-                    <g key={5} className="transition-transform duration-300 hover:scale-125">
-                      <circle 
-                        cx={300} 
-                        cy={200 - (80 - 68) / 15 * 200} 
-                        r="6"
-                        fill="#0EA5E9"
-                        className="transition-all duration-500"
-                        style={{ transitionDelay: "0.5s" }}
-                      />
-                      <circle 
-                        cx={300} 
-                        cy={200 - (80 - 68) / 15 * 200} 
-                        r="3"
-                        fill="#fff"
-                        className="transition-all duration-500"
-                        style={{ transitionDelay: "0.5s" }}
-                      />
-                    </g>
+                    {resultData.map((item, index) => {
+                      const x = index * 60;
+                      const y = 200 - (80 - item.weight) / 15 * 200;
+                      return (
+                        <g key={index} className="transition-transform duration-300 hover:scale-125 cursor-pointer">
+                          <circle 
+                            cx={x} 
+                            cy={y} 
+                            r="6"
+                            fill={item.color}
+                            className="transition-all duration-500"
+                            style={{ transitionDelay: `${index * 0.1}s` }}
+                          />
+                          <circle 
+                            cx={x} 
+                            cy={y} 
+                            r="3"
+                            fill="#fff"
+                            className="transition-all duration-500"
+                            style={{ transitionDelay: `${index * 0.1}s` }}
+                          />
+                        </g>
+                      );
+                    })}
                   </svg>
                 </div>
                 
-                <div className="absolute left-12 right-4 bottom-0 flex justify-between text-xs text-zinc-400">
+                <div className="absolute left-12 right-4 bottom-0 flex justify-between text-xs text-white font-medium">
                   {resultData.map((item, index) => (
                     <div key={index} className="flex flex-col items-center">
                       <span>{item.month}</span>
@@ -427,24 +338,37 @@ const Index = () => {
                       >
                         <div 
                           className={cn(
-                            "absolute bottom-full mb-2 -left-14 w-28 bg-black p-2 rounded text-center text-xs transform scale-0 opacity-0 pointer-events-none transition-all duration-200",
+                            "absolute bottom-full mb-2 -left-14 w-28 bg-black border border-white/30 p-2 rounded text-center text-xs transform scale-0 opacity-0 pointer-events-none transition-all duration-200 shadow-[0_0_15px_rgba(255,255,255,0.15)]",
                             activeDataIndex === index ? "scale-100 opacity-100" : ""
                           )}
                           style={{ transitionDelay: activeDataIndex === index ? "0.3s" : "0s" }}
                         >
                           <div className="font-semibold text-primary">{item.month}</div>
-                          <div className="text-zinc-300">Peso: {item.weight}kg</div>
-                          <div className="text-zinc-500">Cal: {item.calories}</div>
-                          <div className="absolute -bottom-1 left-1/2 w-2 h-2 bg-black transform rotate-45 -translate-x-1/2"></div>
+                          <div className="text-white font-medium">Peso: {item.weight}kg</div>
+                          <div className="text-gray-300">Cal: {item.calories}</div>
+                          <div className="absolute -bottom-1 left-1/2 w-2 h-2 bg-black border-r border-b border-white/30 transform rotate-45 -translate-x-1/2"></div>
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
+                
+                {resultData.map((item, index) => (
+                  <div 
+                    key={`label-${index}`}
+                    className="absolute text-xs font-bold text-white/80"
+                    style={{ 
+                      left: `${(index * 20) + 12}%`, 
+                      top: `${((80 - item.weight) / 15) * 70 + 22}%`,
+                    }}
+                  >
+                    {item.weight}kg
+                  </div>
+                ))}
               </div>
               
               <div className="mt-4 text-center">
-                <p className="text-zinc-400 text-sm">Média de perda de peso dos usuários em 6 meses</p>
+                <p className="text-white text-sm">Média de perda de peso dos usuários em 6 meses</p>
                 <button 
                   onClick={() => {
                     setIsAnimating(false);
