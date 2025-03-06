@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -7,12 +6,14 @@ import { Send, Mic, User } from "lucide-react";
 import MainLayout from "@/layouts/MainLayout";
 import { useToast } from "@/hooks/use-toast";
 import { calculateBMI, getBMICategory, calculateIdealWeightRange, suggestWeightGoal } from "@/utils/nutritionUtils";
+import BMIChart from "@/components/BMIChart";
 
 type Message = {
   id: string;
   content: string;
   sender: "user" | "ai";
   timestamp: Date;
+  chart?: boolean;
 };
 
 type AssessmentStage = 
@@ -57,22 +58,18 @@ const Chat = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
-  // Auto-scroll to bottom of messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Effect to handle assessment flow
   useEffect(() => {
     if (assessmentStage === "initial") {
-      // Wait for user confirmation to start
       return;
     }
     
     const askNextQuestion = () => {
       setIsTyping(true);
       
-      // Simulate AI thinking
       setTimeout(() => {
         let questionMessage: Message;
         
@@ -109,26 +106,39 @@ const Chat = () => {
             const bmiCategory = getBMICategory(bmi);
             const { min, max } = calculateIdealWeightRange(userProfile.height!);
             
-            questionMessage = {
-              id: Date.now().toString(),
-              content: `Obrigada pelas informações! Seu IMC é ${bmi}, classificado como "${bmiCategory}". 
-              
+            const chartMessage: Message = {
+              id: Date.now().toString() + "-chart",
+              content: "",
+              sender: "ai",
+              timestamp: new Date(),
+              chart: true
+            };
+            
+            setMessages(prev => [...prev, chartMessage]);
+            
+            setTimeout(() => {
+              questionMessage = {
+                id: Date.now().toString(),
+                content: `Obrigada pelas informações! Seu IMC é ${bmi}, classificado como "${bmiCategory}". 
+                
 Para sua altura, o peso ideal estaria entre ${min}kg e ${max}kg.
-              
+                
 Qual é o seu objetivo principal? Responda com:
 1 - Perder peso
 2 - Manter peso
 3 - Ganhar peso`,
-              sender: "ai",
-              timestamp: new Date()
-            };
-            
-            // Update BMI in profile
-            setUserProfile(prev => ({
-              ...prev,
-              bmi: bmi
-            }));
-            break;
+                sender: "ai",
+                timestamp: new Date()
+              };
+              
+              setUserProfile(prev => ({
+                ...prev,
+                bmi: bmi
+              }));
+              
+              setMessages(prev => [...prev, questionMessage]);
+            }, 500);
+            return;
             
           case "completed":
             let goalMessage = "";
@@ -152,28 +162,42 @@ Qual é o seu objetivo principal? Responda com:
                 : `Para manter um peso saudável, o ideal seria estar entre ${calculateIdealWeightRange(userProfile.height!).min}kg e ${calculateIdealWeightRange(userProfile.height!).max}kg.`;
             }
             
-            // Update weight goal
-            setUserProfile(prev => ({
-              ...prev,
-              weightGoal: suggestedGoal
-            }));
+            const summaryChartMessage: Message = {
+              id: Date.now().toString() + "-summary-chart",
+              content: "",
+              sender: "ai",
+              timestamp: new Date(),
+              chart: true
+            };
             
-            questionMessage = {
-              id: Date.now().toString(),
-              content: `Perfeito, ${userProfile.name}!
-              
+            setMessages(prev => [...prev, summaryChartMessage]);
+            
+            setTimeout(() => {
+              questionMessage = {
+                id: Date.now().toString(),
+                content: `Perfeito, ${userProfile.name}!
+                
 Resumo do seu perfil:
 - Altura: ${userProfile.height}cm
 - Peso atual: ${userProfile.weight}kg
 - IMC: ${userProfile.bmi} (${getBMICategory(userProfile.bmi!)})
-              
+                
 ${goalMessage}
-              
+                
 Agora posso te ajudar com recomendações nutricionais personalizadas para atingir seu objetivo. O que gostaria de saber primeiro? Pode me perguntar sobre planos alimentares, dicas de alimentos específicos ou estratégias para alcançar sua meta.`,
-              sender: "ai",
-              timestamp: new Date()
-            };
-            break;
+                sender: "ai",
+                timestamp: new Date()
+              };
+              
+              setUserProfile(prev => ({
+                ...prev,
+                weightGoal: suggestedGoal
+              }));
+              
+              setMessages(prev => [...prev, questionMessage]);
+              setIsTyping(false);
+            }, 500);
+            return;
             
           default:
             return;
@@ -190,7 +214,6 @@ Agora posso te ajudar com recomendações nutricionais personalizadas para ating
   const handleSendMessage = () => {
     if (!input.trim()) return;
 
-    // Add user message
     const userMessage: Message = {
       id: Date.now().toString(),
       content: input,
@@ -201,19 +224,15 @@ Agora posso te ajudar com recomendações nutricionais personalizadas para ating
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     
-    // Process user response based on current assessment stage
     if (assessmentStage === "initial") {
-      // User agrees to start assessment
       setAssessmentStage("ask_name");
     } else if (assessmentStage === "ask_name") {
-      // Store user name
       setUserProfile(prev => ({
         ...prev,
         name: input.trim()
       }));
       setAssessmentStage("ask_height");
     } else if (assessmentStage === "ask_height") {
-      // Store height
       const height = parseFloat(input.trim());
       if (!isNaN(height) && height > 0) {
         setUserProfile(prev => ({
@@ -222,7 +241,6 @@ Agora posso te ajudar com recomendações nutricionais personalizadas para ating
         }));
         setAssessmentStage("ask_weight");
       } else {
-        // Invalid height, ask again
         setIsTyping(true);
         setTimeout(() => {
           const errorMessage: Message = {
@@ -236,7 +254,6 @@ Agora posso te ajudar com recomendações nutricionais personalizadas para ating
         }, 1000);
       }
     } else if (assessmentStage === "ask_weight") {
-      // Store weight
       const weight = parseFloat(input.trim());
       if (!isNaN(weight) && weight > 0) {
         setUserProfile(prev => ({
@@ -245,7 +262,6 @@ Agora posso te ajudar com recomendações nutricionais personalizadas para ating
         }));
         setAssessmentStage("ask_goal");
       } else {
-        // Invalid weight, ask again
         setIsTyping(true);
         setTimeout(() => {
           const errorMessage: Message = {
@@ -259,7 +275,6 @@ Agora posso te ajudar com recomendações nutricionais personalizadas para ating
         }, 1000);
       }
     } else if (assessmentStage === "ask_goal") {
-      // Store goal
       let goal: "lose" | "maintain" | "gain" | null = null;
       
       if (input.includes("1") || input.toLowerCase().includes("perder")) {
@@ -277,7 +292,6 @@ Agora posso te ajudar com recomendações nutricionais personalizadas para ating
         }));
         setAssessmentStage("completed");
       } else {
-        // Invalid goal, ask again
         setIsTyping(true);
         setTimeout(() => {
           const errorMessage: Message = {
@@ -291,10 +305,8 @@ Agora posso te ajudar com recomendações nutricionais personalizadas para ating
         }, 1000);
       }
     } else {
-      // Assessment completed, regular chat mode
       setIsTyping(true);
       
-      // Simulate AI thinking
       setTimeout(() => {
         generateAIResponse(input);
       }, 1500);
@@ -302,7 +314,6 @@ Agora posso te ajudar com recomendações nutricionais personalizadas para ating
   };
 
   const generateAIResponse = (userInput: string) => {
-    // Enhanced nutrition-focused responses
     const responses = [
       `Baseado no seu IMC de ${userProfile.bmi} e seu objetivo de ${userProfile.fitnessGoal === "lose" ? "perda de peso" : userProfile.fitnessGoal === "gain" ? "ganho de peso" : "manutenção"}, recomendo aumentar a ingestão de proteínas magras e vegetais de folhas verdes.`,
       
@@ -349,7 +360,6 @@ Agora posso te ajudar com recomendações nutricionais personalizadas para ating
     <MainLayout>
       <div className="container mx-auto px-4 py-8 flex flex-col h-[calc(100vh-8rem)]">
         <Card className="flex flex-col flex-1 overflow-hidden border-white/20 bg-gradient-to-br from-black/80 to-zinc-900/90">
-          {/* Chat header */}
           <div className="border-b border-white/10 p-4 flex items-center">
             <div className="flex items-center space-x-3">
               <Avatar>
@@ -364,7 +374,6 @@ Agora posso te ajudar com recomendações nutricionais personalizadas para ating
             </div>
           </div>
 
-          {/* Messages container */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-black/20">
             {messages.map((message) => (
               <div
@@ -373,18 +382,29 @@ Agora posso te ajudar com recomendações nutricionais personalizadas para ating
                   message.sender === "user" ? "justify-end" : "justify-start"
                 }`}
               >
-                <div
-                  className={`max-w-[80%] rounded-2xl p-4 ${
-                    message.sender === "user"
-                      ? "bg-primary text-white rounded-tr-none"
-                      : "bg-zinc-800 text-white rounded-tl-none"
-                  }`}
-                >
-                  <p>{message.content}</p>
-                  <p className="text-xs opacity-70 mt-1 text-right">
-                    {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </p>
-                </div>
+                {message.chart ? (
+                  <div className="max-w-[95%] w-full">
+                    <BMIChart 
+                      bmi={userProfile.bmi!} 
+                      currentWeight={userProfile.weight!} 
+                      idealWeightMin={calculateIdealWeightRange(userProfile.height!).min}
+                      idealWeightMax={calculateIdealWeightRange(userProfile.height!).max}
+                    />
+                  </div>
+                ) : (
+                  <div
+                    className={`max-w-[80%] rounded-2xl p-4 ${
+                      message.sender === "user"
+                        ? "bg-primary text-white rounded-tr-none"
+                        : "bg-zinc-800 text-white rounded-tl-none"
+                    }`}
+                  >
+                    <p>{message.content}</p>
+                    <p className="text-xs opacity-70 mt-1 text-right">
+                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
+                )}
               </div>
             ))}
             {isTyping && (
@@ -401,7 +421,6 @@ Agora posso te ajudar com recomendações nutricionais personalizadas para ating
             <div ref={messagesEndRef}></div>
           </div>
 
-          {/* Input area */}
           <div className="border-t border-white/10 p-4">
             <div className="flex items-center space-x-2">
               <div className="flex-1 bg-zinc-800 rounded-full flex items-center overflow-hidden">
