@@ -1,8 +1,9 @@
+
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
-import { Send, Mic, User } from "lucide-react";
+import { Send, Mic, Check } from "lucide-react";
 import MainLayout from "@/layouts/MainLayout";
 import { useToast } from "@/hooks/use-toast";
 import { calculateBMI, getBMICategory, calculateIdealWeightRange, suggestWeightGoal } from "@/utils/nutritionUtils";
@@ -14,6 +15,7 @@ type Message = {
   sender: "user" | "ai";
   timestamp: Date;
   chart?: boolean;
+  status?: "sent" | "delivered" | "read";
 };
 
 type AssessmentStage = 
@@ -41,6 +43,7 @@ const Chat = () => {
       content: "Olá! Sou a NutriGênio, sua nutricionista virtual. Gostaria de fazer algumas perguntas para entender melhor seus objetivos e calcular seu IMC. Podemos começar?",
       sender: "ai",
       timestamp: new Date(),
+      status: "read"
     },
   ]);
   
@@ -356,25 +359,35 @@ Agora posso te ajudar com recomendações nutricionais personalizadas para ating
     });
   };
 
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
   return (
     <MainLayout>
-      <div className="container mx-auto px-4 py-8 flex flex-col h-[calc(100vh-8rem)]">
-        <Card className="flex flex-col flex-1 overflow-hidden border-white/20 bg-gradient-to-br from-black/80 to-zinc-900/90">
-          <div className="border-b border-white/10 p-4 flex items-center">
-            <div className="flex items-center space-x-3">
-              <Avatar>
-                <div className="bg-primary/20 h-full w-full flex items-center justify-center">
-                  <span className="text-primary text-xl font-bold">N</span>
-                </div>
-              </Avatar>
-              <div>
-                <h2 className="font-bold">NutriGênio</h2>
-                <p className="text-xs text-white/70">Nutricionista IA • Online</p>
+      <div className="container mx-auto px-0 sm:px-4 py-0 sm:py-8 flex flex-col h-[calc(100vh-5rem)]">
+        <Card className="flex flex-col flex-1 overflow-hidden border-white/20 shadow-none rounded-none sm:rounded-xl bg-[#f0f2f5]">
+          {/* WhatsApp-style header */}
+          <div className="bg-nutrition-700 text-white p-3 flex items-center gap-3">
+            <Avatar>
+              <div className="bg-nutrition-500 h-full w-full flex items-center justify-center">
+                <span className="text-white text-xl font-bold">N</span>
               </div>
+            </Avatar>
+            <div>
+              <h2 className="font-semibold">NutriGênio</h2>
+              <p className="text-xs text-nutrition-100">Online agora</p>
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-black/20">
+          {/* Chat background with pattern */}
+          <div 
+            className="flex-1 overflow-y-auto p-4 space-y-2 bg-[#e5ddd5] bg-opacity-90"
+            style={{ 
+              backgroundImage: 'url("data:image/svg+xml,%3Csvg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M8 16c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm0-2c3.314 0 6-2.686 6-6s-2.686-6-6-6-6 2.686-6 6 2.686 6 6 6zm33.414-6l5.95-5.95L45.95.636 40 6.586 34.05.636 32.636 2.05 38.586 8l-5.95 5.95 1.414 1.414L40 9.414l5.95 5.95 1.414-1.414L41.414 8zM40 48c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm0-2c3.314 0 6-2.686 6-6s-2.686-6-6-6-6 2.686-6 6 2.686 6 6 6zM9.414 40l5.95-5.95-1.414-1.414L8 38.586l-5.95-5.95L.636 34.05 6.586 40l-5.95 5.95 1.414 1.414L8 41.414l5.95 5.95 1.414-1.414L9.414 40z" fill="%23cecece" fill-opacity="0.15" fill-rule="evenodd"/%3E%3C/svg%3E")',
+              backgroundAttachment: 'fixed'
+            }}
+          >
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -383,7 +396,7 @@ Agora posso te ajudar com recomendações nutricionais personalizadas para ating
                 }`}
               >
                 {message.chart ? (
-                  <div className="max-w-[95%] w-full">
+                  <div className="max-w-[95%] w-full bg-white rounded-xl shadow-md p-2">
                     <BMIChart 
                       bmi={userProfile.bmi!} 
                       currentWeight={userProfile.weight!} 
@@ -393,27 +406,38 @@ Agora posso te ajudar com recomendações nutricionais personalizadas para ating
                   </div>
                 ) : (
                   <div
-                    className={`max-w-[80%] rounded-2xl p-4 ${
+                    className={`max-w-[80%] rounded-lg p-2 ${
                       message.sender === "user"
-                        ? "bg-primary text-white rounded-tr-none"
-                        : "bg-zinc-800 text-white rounded-tl-none"
+                        ? "bg-nutrition-100 text-gray-800 rounded-tr-none"
+                        : "bg-white text-gray-800 rounded-tl-none"
                     }`}
                   >
-                    <p>{message.content}</p>
-                    <p className="text-xs opacity-70 mt-1 text-right">
-                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </p>
+                    <p className="p-1">{message.content}</p>
+                    <div className="flex items-center justify-end gap-1 pt-1">
+                      <p className="text-xs text-gray-500">
+                        {formatTime(message.timestamp)}
+                      </p>
+                      {message.sender === "user" && message.status && (
+                        <span className="text-gray-500">
+                          {message.status === "read" ? (
+                            <Check className="h-3 w-3 text-nutrition-500" />
+                          ) : (
+                            <Check className="h-3 w-3" />
+                          )}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
             ))}
             {isTyping && (
               <div className="flex justify-start">
-                <div className="max-w-[80%] rounded-2xl p-4 bg-zinc-800 text-white rounded-tl-none">
-                  <div className="flex space-x-2">
-                    <div className="w-2 h-2 rounded-full bg-white/50 animate-bounce" style={{ animationDelay: "0ms" }}></div>
-                    <div className="w-2 h-2 rounded-full bg-white/50 animate-bounce" style={{ animationDelay: "150ms" }}></div>
-                    <div className="w-2 h-2 rounded-full bg-white/50 animate-bounce" style={{ animationDelay: "300ms" }}></div>
+                <div className="max-w-[80%] rounded-lg p-3 bg-white text-gray-800 rounded-tl-none">
+                  <div className="flex space-x-1">
+                    <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: "0ms" }}></div>
+                    <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: "150ms" }}></div>
+                    <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: "300ms" }}></div>
                   </div>
                 </div>
               </div>
@@ -421,39 +445,39 @@ Agora posso te ajudar com recomendações nutricionais personalizadas para ating
             <div ref={messagesEndRef}></div>
           </div>
 
-          <div className="border-t border-white/10 p-4">
-            <div className="flex items-center space-x-2">
-              <div className="flex-1 bg-zinc-800 rounded-full flex items-center overflow-hidden">
+          {/* WhatsApp-style input */}
+          <div className="bg-[#f0f2f5] p-2">
+            <div className="flex items-center gap-2">
+              <Button
+                size="icon"
+                variant="ghost"
+                className="rounded-full h-10 w-10 text-[#128c7e]"
+                onClick={handleVoiceInput}
+              >
+                <Mic className="h-5 w-5" />
+              </Button>
+              
+              <div className="flex-1 bg-white rounded-full flex items-center overflow-hidden">
                 <textarea
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyPress}
-                  placeholder="Digite sua mensagem..."
-                  className="bg-transparent flex-1 py-3 px-4 outline-none text-white resize-none max-h-32"
+                  placeholder="Digite uma mensagem"
+                  className="bg-transparent flex-1 py-2 px-4 outline-none text-gray-800 resize-none max-h-32"
                   rows={1}
                   style={{ height: "auto" }}
                 ></textarea>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="rounded-full h-10 w-10 mr-1"
-                  onClick={handleVoiceInput}
-                >
-                  <Mic className="h-5 w-5" />
-                </Button>
-                <Button
-                  size="icon"
-                  className="rounded-full h-10 w-10 mr-1 bg-primary hover:bg-primary/90"
-                  onClick={handleSendMessage}
-                  disabled={!input.trim()}
-                >
-                  <Send className="h-5 w-5" />
-                </Button>
               </div>
+              
+              <Button
+                size="icon"
+                className="rounded-full h-10 w-10 bg-nutrition-600 hover:bg-nutrition-700 text-white"
+                onClick={handleSendMessage}
+                disabled={!input.trim()}
+              >
+                <Send className="h-5 w-5" />
+              </Button>
             </div>
-            <p className="text-xs text-white/50 mt-2 text-center">
-              NutriGênio está em fase beta. As respostas são baseadas em conhecimentos nutricionais gerais.
-            </p>
           </div>
         </Card>
       </div>
