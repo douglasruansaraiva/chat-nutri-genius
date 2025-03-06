@@ -502,7 +502,7 @@ const Index = () => {
                     {[...Array(5)].map((_, i) => <Star key={i} className="inline-block h-5 w-5 text-yellow-500 fill-current transform transition-transform duration-300 hover:scale-125" />)}
                   </div>
                   
-                  <blockquote className="relative mb-4 text-nutrition-800 font-medium text-lg bg-zinc-950">
+                  <blockquote className="relative mb-4 text-white font-medium text-lg bg-zinc-950">
                     "{testimonial.content}"
                   </blockquote>
                   
