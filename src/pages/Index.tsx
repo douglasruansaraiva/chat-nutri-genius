@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import MainLayout from "@/layouts/MainLayout";
+import ChatPopup from "@/components/ChatPopup";
 import { ArrowRight, MessageSquare, LineChart, Calendar, User, Check, BarChart, TrendingUp, Award, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
@@ -96,6 +97,7 @@ const Index = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
   const [chartData, setChartData] = useState([]);
+  const [chatOpen, setChatOpen] = useState(false);
 
   useEffect(() => {
     if (!initialLoadDone) {
@@ -124,6 +126,14 @@ const Index = () => {
       return () => clearTimeout(timeout);
     }
   }, [isAnimating, initialLoadDone]);
+
+  useEffect(() => {
+    const chatTimer = setTimeout(() => {
+      setChatOpen(true);
+    }, 5000);
+    
+    return () => clearTimeout(chatTimer);
+  }, []);
 
   const restartAnimation = () => {
     setIsAnimating(false);
@@ -544,6 +554,17 @@ const Index = () => {
           </div>
         </div>
       </section>
+      
+      <ChatPopup isOpen={chatOpen} onClose={() => setChatOpen(false)} />
+      
+      <div className="fixed bottom-4 right-4 z-40">
+        <Button 
+          onClick={() => setChatOpen(true)}
+          className="rounded-full h-14 w-14 bg-primary hover:bg-primary/90 shadow-lg flex items-center justify-center p-0"
+        >
+          <MessageSquare className="h-6 w-6" />
+        </Button>
+      </div>
     </MainLayout>;
 };
 
