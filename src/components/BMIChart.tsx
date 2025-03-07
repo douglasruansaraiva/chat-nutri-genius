@@ -4,13 +4,19 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ReferenceLine, ResponsiveContaine
 import { Scale } from "lucide-react";
 
 interface BMIChartProps {
-  bmi: number;
-  currentWeight: number;
-  idealWeightMin: number;
-  idealWeightMax: number;
+  height: number;
+  weight: number;
 }
 
-const BMIChart = ({ bmi, currentWeight, idealWeightMin, idealWeightMax }: BMIChartProps) => {
+const BMIChart = ({ height, weight }: BMIChartProps) => {
+  // Calculate BMI
+  const heightInMeters = height / 100;
+  const bmi = parseFloat((weight / (heightInMeters * heightInMeters)).toFixed(1));
+  
+  // Calculate ideal weight range
+  const idealWeightMin = parseFloat((18.5 * heightInMeters * heightInMeters).toFixed(1));
+  const idealWeightMax = parseFloat((24.9 * heightInMeters * heightInMeters).toFixed(1));
+  
   // Create data for the BMI categories
   const data = [
     { name: "Abaixo do peso", range: "< 18.5", value: 18.5, color: "#3b82f6" },
@@ -99,7 +105,7 @@ const BMIChart = ({ bmi, currentWeight, idealWeightMin, idealWeightMax }: BMICha
       
       <div className="mt-3 p-3 bg-zinc-800 rounded border border-zinc-700 text-sm">
         <p className="text-white mb-2">
-          <span className="font-semibold">Seu peso atual:</span> {currentWeight} kg
+          <span className="font-semibold">Seu peso atual:</span> {weight} kg
         </p>
         <p className="text-primary">
           <span className="font-semibold">Peso ideal:</span> {idealWeightMin}-{idealWeightMax} kg

@@ -1,5 +1,5 @@
 
-export const calculateBMI = (weight: number, height: number): number => {
+export const calculateBMI = (height: number, weight: number): number => {
   // Height in meters, weight in kg
   const heightInMeters = height / 100;
   return parseFloat((weight / (heightInMeters * heightInMeters)).toFixed(1));
@@ -20,6 +20,11 @@ export const calculateIdealWeightRange = (height: number): { min: number; max: n
   const maxIdealWeight = parseFloat((24.9 * heightInMeters * heightInMeters).toFixed(1));
   
   return { min: minIdealWeight, max: maxIdealWeight };
+};
+
+// Add the missing getIdealWeightRange function
+export const getIdealWeightRange = (height: number): { min: number; max: number } => {
+  return calculateIdealWeightRange(height);
 };
 
 export const suggestWeightGoal = (currentWeight: number, height: number): number => {
