@@ -140,6 +140,10 @@ const Index = () => {
     setTimeout(() => setIsAnimating(true), 300);
   };
 
+  const handleOpenChat = () => {
+    setChatOpen(true);
+  };
+
   return <MainLayout>
       <section className="relative pt-20 pb-16 md:pt-24 md:pb-20 overflow-hidden">
         <div className="absolute inset-0 -z-10">
@@ -172,14 +176,17 @@ const Index = () => {
               <div className="flex flex-col sm:flex-row gap-4 animate-slide-in" style={{
               animationDelay: "0.2s"
             }}>
-                <Button asChild size="lg" className="px-8 relative overflow-hidden group">
-                  <Link to="/pricing">
-                    Começar Agora
-                    <span className="absolute inset-0 w-full h-full bg-white/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
-                  </Link>
+                <Button 
+                  size="lg" 
+                  className="px-8 relative overflow-hidden group"
+                  onClick={handleOpenChat}
+                >
+                  Teste Grátis
+                  <MessageSquare className="ml-2 h-4 w-4" />
+                  <span className="absolute inset-0 w-full h-full bg-white/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
                 </Button>
                 <Button asChild size="lg" variant="outline">
-                  <Link to="/pricing">Saiba Mais</Link>
+                  <Link to="/dashboard">Saiba Mais</Link>
                 </Button>
               </div>
             </div>
@@ -413,7 +420,7 @@ const Index = () => {
                 <div className="absolute bottom-0 left-0 w-14 h-14 bg-nutrition-100 rounded-tr-[25px] transform -rotate-12 -z-0 opacity-40 group-hover:rotate-45 group-hover:scale-125 transition-all duration-700"></div>
                 
                 {index === 0 && <div className="absolute -bottom-2 -right-2 w-12 h-12 rounded-full overflow-hidden opacity-80">
-                    <img src="https://images.unsplash.com/photo-1528825871115-3581a5387919?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Fruta" className="w-full h-full object-cover" />
+                    <img src="https://images.unsplash.com/photo-1528825871115-3a2f5be94cd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Fruta" className="w-full h-full object-cover" />
                   </div>}
                 {index === 1 && <div className="absolute -bottom-2 -right-2 w-12 h-12 rounded-full overflow-hidden opacity-80">
                     <img src="https://images.unsplash.com/photo-1490885578174-acda8905c2c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Fruta" className="w-full h-full object-cover" />
@@ -540,15 +547,18 @@ const Index = () => {
             Comece sua jornada para uma vida mais saudável hoje mesmo com o NutriGênio.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" variant="secondary" className="bg-white text-nutrition-800 hover:bg-white/90">
-              <Link to="/pricing">
-                Experimentar Grátis
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
+            <Button 
+              size="lg" 
+              variant="secondary" 
+              className="bg-white text-nutrition-800 hover:bg-white/90"
+              onClick={handleOpenChat}
+            >
+              Experimente Grátis
+              <MessageSquare className="ml-2 h-4 w-4" />
             </Button>
             <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-              <Link to="/pricing">
-                Ver Planos
+              <Link to="/dashboard">
+                Acessar Dashboard
               </Link>
             </Button>
           </div>
