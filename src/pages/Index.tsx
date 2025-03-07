@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import MainLayout from "@/layouts/MainLayout";
@@ -98,6 +98,7 @@ const Index = () => {
   const [initialLoadDone, setInitialLoadDone] = useState(false);
   const [chartData, setChartData] = useState([]);
   const [chatOpen, setChatOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!initialLoadDone) {
@@ -141,7 +142,7 @@ const Index = () => {
   };
 
   const handleOpenChat = () => {
-    setChatOpen(true);
+    navigate('/lead');
   };
 
   return <MainLayout>
