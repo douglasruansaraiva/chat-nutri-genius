@@ -163,7 +163,7 @@ const Chat: React.FC<ChatProps> = ({ isPopup = false }) => {
 
   // Use a different container based on whether it's a popup or full page
   const Container = isPopup 
-    ? ({ children }: { children: React.ReactNode }) => <div className="h-full">{children}</div> 
+    ? ({ children }: { children: React.ReactNode }) => <div className="h-full flex flex-col">{children}</div> 
     : ({ children }: { children: React.ReactNode }) => <DashboardLayout>{children}</DashboardLayout>;
 
   return (
@@ -238,13 +238,14 @@ const Chat: React.FC<ChatProps> = ({ isPopup = false }) => {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input Area */}
-        <form onSubmit={handleSubmit} className="p-3 border-t border-gray-800 bg-[#1F2C33] flex items-center gap-2">
+        {/* Input Area - Ensuring this is visible and positioned correctly */}
+        <form onSubmit={handleSubmit} className="p-3 border-t border-gray-800 bg-[#1F2C33] flex items-center gap-2 sticky bottom-0 z-10">
           <Input
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Digite uma mensagem"
             className="flex-1 bg-[#2A3942] border-0 text-white placeholder-gray-400 focus-visible:ring-1 focus-visible:ring-primary"
+            autoFocus
           />
           <Button 
             type="submit" 
