@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import MainLayout from '@/layouts/MainLayout';
 import ChatPopup from '@/components/ChatPopup';
 import { Card, CardContent } from '@/components/ui/card';
@@ -9,14 +9,7 @@ import { Button } from '@/components/ui/button';
 const Lead = () => {
   const [chatOpen, setChatOpen] = useState(false);
 
-  // Automatically open the chat when the page loads
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setChatOpen(true);
-    }, 1000); // Open chat after 1 second
-    
-    return () => clearTimeout(timer);
-  }, []);
+  // Removed the useEffect that automatically opened the chat
 
   return (
     <MainLayout>
