@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, useLocation, Navigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,8 @@ import {
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAuth } from "@/contexts/AuthContext";
+import { Badge } from "@/components/ui/badge";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -47,7 +50,8 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const location = useLocation();
   const isMobile = useIsMobile();
   
-  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+  // Use our new auth context
+  const { isAuthenticated, user, logout } = useAuth();
   
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
@@ -71,11 +75,6 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   
   const isActive = (path: string) => {
     return location.pathname === path;
-  };
-  
-  const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
-    window.location.href = "/";
   };
 
   if (!isAuthenticated) {
@@ -116,10 +115,14 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
+                    <DropdownMenuItem className="flex flex-col items-start">
+                      <span className="font-medium">{user?.name}</span>
+                      <span className="text-xs text-muted-foreground">{user?.email}</span>
+                    </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link to="/profile">Perfil</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleLogout}>
+                    <DropdownMenuItem onClick={logout}>
                       Sair
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -139,14 +142,10 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
 const DashboardSidebar = () => {
   const location = useLocation();
+  const { user, logout } = useAuth();
   
   const isActive = (path: string) => {
     return location.pathname === path;
-  };
-  
-  const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
-    window.location.href = "/";
   };
   
   return (
@@ -156,7 +155,14 @@ const DashboardSidebar = () => {
           <span className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
             <span className="text-primary text-lg">N</span>
           </span>
-          <span className="font-bold text-lg">NutriGênio</span>
+          <div>
+            <span className="font-bold text-lg">NutriGênio</span>
+            {user?.plan && (
+              <Badge variant="outline" className="ml-2 text-xs">
+                {user.plan === 'premium' ? 'Premium' : user.plan === 'basic' ? 'Essencial' : 'Grátis'}
+              </Badge>
+            )}
+          </div>
         </Link>
       </SidebarHeader>
       
@@ -183,41 +189,49 @@ const DashboardSidebar = () => {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive("/progress")}>
-                  <Link to="/progress">
-                    <LineChart size={20} />
-                    <span>Progresso</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {(user?.plan === 'basic' || user?.plan === 'premium') && (
+                <>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={isActive("/progress")}>
+                      <Link to="/progress">
+                        <LineChart size={20} />
+                        <span>Progresso</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={isActive("/goals")}>
+                      <Link to="/goals">
+                        <Goal size={20} />
+                        <span>Metas</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </>
+              )}
               
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive("/goals")}>
-                  <Link to="/goals">
-                    <Goal size={20} />
-                    <span>Metas</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive("/meal-plan")}>
-                  <Link to="/meal-plan">
-                    <Apple size={20} />
-                    <span>Plano Alimentar</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive("/calendar")}>
-                  <Link to="/calendar">
-                    <Calendar size={20} />
-                    <span>Calendário</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {user?.plan === 'premium' && (
+                <>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={isActive("/meal-plan")}>
+                      <Link to="/meal-plan">
+                        <Apple size={20} />
+                        <span>Plano Alimentar</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={isActive("/calendar")}>
+                      <Link to="/calendar">
+                        <Calendar size={20} />
+                        <span>Calendário</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </>
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -245,7 +259,7 @@ const DashboardSidebar = () => {
               </SidebarMenuItem>
               
               <SidebarMenuItem>
-                <SidebarMenuButton onClick={handleLogout}>
+                <SidebarMenuButton onClick={logout}>
                   <LogOut size={20} />
                   <span>Sair</span>
                 </SidebarMenuButton>

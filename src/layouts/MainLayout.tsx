@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -11,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -22,8 +22,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const location = useLocation();
   const isMobile = useIsMobile();
   
-  // Check if user is authenticated (placeholder)
-  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+  const { isAuthenticated, user, logout } = useAuth();
   
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
@@ -54,8 +53,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   };
   
   const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
-    window.location.href = "/";
+    logout();
+    setIsMenuOpen(false);
   };
 
   return (
@@ -72,7 +71,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             <span>NutriGênio</span>
           </Link>
           
-          {/* Desktop Navigation */}
           {!isMobile && (
             <nav className="flex items-center gap-6">
               <Link 
@@ -85,15 +83,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
                 Início
               </Link>
               <Link 
-                to="/about" 
-                className={cn(
-                  "text-sm font-medium transition-colors hover:text-primary",
-                  isActive("/about") ? "text-primary" : "text-muted-foreground"
-                )}
-              >
-                Sobre
-              </Link>
-              <Link 
                 to="/pricing" 
                 className={cn(
                   "text-sm font-medium transition-colors hover:text-primary",
@@ -101,6 +90,15 @@ const MainLayout = ({ children }: MainLayoutProps) => {
                 )}
               >
                 Planos
+              </Link>
+              <Link 
+                to="/lead" 
+                className={cn(
+                  "text-sm font-medium transition-colors hover:text-primary",
+                  isActive("/lead") ? "text-primary" : "text-muted-foreground"
+                )}
+              >
+                Experimente
               </Link>
               
               <div className="flex items-center gap-2">
@@ -137,15 +135,19 @@ const MainLayout = ({ children }: MainLayoutProps) => {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
-                  <Button asChild className="ml-2">
-                    <Link to="/login">Entrar</Link>
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <Button variant="outline" asChild>
+                      <Link to="/login">Entrar</Link>
+                    </Button>
+                    <Button asChild>
+                      <Link to="/register">Registrar</Link>
+                    </Button>
+                  </div>
                 )}
               </div>
             </nav>
           )}
           
-          {/* Mobile Menu Button */}
           {isMobile && (
             <div className="flex items-center gap-2">
               <DropdownMenu>
@@ -171,7 +173,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           )}
         </div>
         
-        {/* Mobile Navigation Menu */}
         {isMobile && isMenuOpen && (
           <div className="fixed inset-0 top-[61px] bg-background z-40 animate-fade-in">
             <nav className="container mx-auto px-4 py-6 flex flex-col gap-4">
@@ -186,16 +187,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
                 Início
               </Link>
               <Link 
-                to="/about" 
-                className={cn(
-                  "py-3 text-lg font-medium transition-colors hover:text-primary",
-                  isActive("/about") ? "text-primary" : "text-muted-foreground"
-                )}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Sobre
-              </Link>
-              <Link 
                 to="/pricing" 
                 className={cn(
                   "py-3 text-lg font-medium transition-colors hover:text-primary",
@@ -204,6 +195,16 @@ const MainLayout = ({ children }: MainLayoutProps) => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Planos
+              </Link>
+              <Link 
+                to="/lead" 
+                className={cn(
+                  "py-3 text-lg font-medium transition-colors hover:text-primary",
+                  isActive("/lead") ? "text-primary" : "text-muted-foreground"
+                )}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Experimente
               </Link>
               
               {isAuthenticated ? (
@@ -225,23 +226,30 @@ const MainLayout = ({ children }: MainLayoutProps) => {
                   <Button 
                     variant="ghost" 
                     className="justify-start px-0 py-3 h-auto text-lg font-medium hover:text-primary text-muted-foreground"
-                    onClick={() => {
-                      handleLogout();
-                      setIsMenuOpen(false);
-                    }}
+                    onClick={handleLogout}
                   >
                     Sair
                   </Button>
                 </>
               ) : (
-                <Button asChild className="mt-2">
-                  <Link 
-                    to="/login"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Entrar
-                  </Link>
-                </Button>
+                <div className="flex flex-col gap-3 mt-2">
+                  <Button asChild variant="outline">
+                    <Link 
+                      to="/login"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Entrar
+                    </Link>
+                  </Button>
+                  <Button asChild>
+                    <Link 
+                      to="/register"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Registrar
+                    </Link>
+                  </Button>
+                </div>
               )}
             </nav>
           </div>
@@ -276,11 +284,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
                 <Link to="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   Início
                 </Link>
-                <Link to="/about" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Sobre
-                </Link>
                 <Link to="/pricing" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   Planos
+                </Link>
+                <Link to="/lead" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Experimente
                 </Link>
               </div>
               

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation, Navigate } from 'react-router-dom';
 import MainLayout from '@/layouts/MainLayout';
 import { Button } from '@/components/ui/button';
@@ -11,27 +11,34 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
-const loginSchema = z.object({
+const registerSchema = z.object({
+  name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
   email: z.string().email('Email inválido'),
-  password: z.string().min(1, 'Senha é obrigatória'),
+  password: z.string().min(6, 'Senha deve ter pelo menos 6 caracteres'),
+  confirmPassword: z.string()
+}).refine(data => data.password === data.confirmPassword, {
+  message: "As senhas não coincidem",
+  path: ["confirmPassword"],
 });
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+type RegisterFormValues = z.infer<typeof registerSchema>;
 
-const Login = () => {
+const Register = () => {
   const location = useLocation();
-  const { login, isAuthenticated, isLoading } = useAuth();
+  const { register, isAuthenticated, isLoading } = useAuth();
   
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
+      name: '',
       email: '',
       password: '',
+      confirmPassword: ''
     }
   });
   
-  const onSubmit = async (data: LoginFormValues) => {
-    await login(data.email, data.password);
+  const onSubmit = async (data: RegisterFormValues) => {
+    await register(data.name, data.email, data.password);
   };
   
   // Redirect if already authenticated
@@ -46,14 +53,28 @@ const Login = () => {
         <div className="max-w-md mx-auto">
           <Card>
             <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl text-center">Login</CardTitle>
+              <CardTitle className="text-2xl text-center">Criar uma conta</CardTitle>
               <CardDescription className="text-center">
-                Entre com seu email e senha
+                Preencha os campos abaixo para se registrar
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Nome</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Seu nome completo" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
                   <FormField
                     control={form.control}
                     name="email"
@@ -82,23 +103,31 @@ const Login = () => {
                     )}
                   />
                   
-                  <div className="flex items-center justify-between">
-                    <Link to="/forgot-password" className="text-sm text-primary hover:underline">
-                      Esqueceu a senha?
-                    </Link>
-                  </div>
+                  <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirmar senha</FormLabel>
+                        <FormControl>
+                          <Input type="password" placeholder="******" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   
                   <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Processando..." : "Entrar"}
+                    {isLoading ? "Processando..." : "Criar conta"}
                   </Button>
                 </form>
               </Form>
             </CardContent>
             <CardFooter className="flex justify-center">
               <div className="text-sm text-muted-foreground">
-                Não tem uma conta?{" "}
-                <Link to="/register" className="text-primary hover:underline">
-                  Registre-se
+                Já tem uma conta?{" "}
+                <Link to="/login" className="text-primary hover:underline">
+                  Faça login
                 </Link>
               </div>
             </CardFooter>
@@ -109,4 +138,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
